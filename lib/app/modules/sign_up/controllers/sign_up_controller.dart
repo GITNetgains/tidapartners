@@ -106,7 +106,7 @@ class SignUpController extends GetxController {
             "username": nameController.text,
             "password": passwordController.text,
             "first_name": nameController.text,
-            "role": "partner_manager",
+            "role": "partner",
             "billing": {
               "first_name": nameController.text,
               "email": emailController.text,
