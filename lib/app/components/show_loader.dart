@@ -13,8 +13,8 @@ class _ShowLoaderState extends State<ShowLoader>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
+    return Scaffold(
+      body: Image.asset(
         AppImages.loading,
       ),
       // ),

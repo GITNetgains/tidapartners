@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../../../utils/colors.dart';
 import '../views/profile_edit.dart';
 
-
 class ProfileBar extends StatelessWidget {
   final String name;
   final String job;
@@ -96,16 +95,13 @@ class ProfileBar extends StatelessWidget {
                               color: kWhiteColor,
                             ),
                           ),
-                          location.toString() !="" ? Text(
-                            'Phone Number: ${location.capitalize.toString()}',
-                            style:
-                                TextStyle(fontSize: 12.0, color: kWhiteColor),
-                          ): Container(),
-                          // Text(
-                          //   'Joined: January 2020',
-                          //   style:
-                          //       TextStyle(fontSize: 14.0, color: kWhiteColor),
-                          // ),
+                          location.toString() != ""
+                              ? Text(
+                                  'Phone Number: ${location.capitalize.toString()}',
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: kWhiteColor),
+                                )
+                              : Container(),
                         ],
                       ),
                     ],

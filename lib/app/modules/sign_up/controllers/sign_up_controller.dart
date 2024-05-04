@@ -2,15 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../utils/colors.dart';
 import '../../../components/snackBar.dart';
 import '../../../data/local/my_shared_pref.dart';
-import '../../../data/models/customer_model.dart';
 import '../../../data/remote/api_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../utils/common_utils.dart';
 import '../../sign_in/controllers/sign_in_controller.dart';
-import '../../sign_in/models/sign_in_model.dart';
 
 class SignUpController extends GetxController {
   late TextEditingController emailController;
@@ -103,21 +100,31 @@ class SignUpController extends GetxController {
         if (passwordController.text == confirmPasswordController.text) {
           Map res = await ApiService().createUserAccount({
             "email": emailController.text,
-            "username": nameController.text,
+            "username": emailController.text,
             "password": passwordController.text,
             "first_name": nameController.text,
-            "role": "partner",
-            "billing": {
-              "first_name": nameController.text,
-              "email": emailController.text,
-              "phone": phoneController.text
-            },
-            "shipping": {
-              "first_name": nameController.text,
-            }
           });
-          if (res["data"] != null) {
-            if (res["data"]["status"] != null) {
+          if (res["code"] == 200) {
+            if (res["user_id"] != null) {
+              MySharedPref.setUserId(res["user_id"].toString());
+              MySharedPref.setName(nameController.text);
+              MySharedPref.setEmail(emailController.text);
+              Get.snackbar(
+                'Success',
+                '${res["message"]}',
+                backgroundColor: Colors.green,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+                borderRadius: 10.0,
+                margin: const EdgeInsets.all(10.0),
+                isDismissible: true,
+                duration: const Duration(seconds: 3),
+              );
+              Get.toNamed(AppPages.HOME);
+              isLoading(false);
+              update();
+              return;
+            } else {
               Get.snackbar(
                 'Error',
                 '${res["message"]}',
@@ -133,55 +140,6 @@ class SignUpController extends GetxController {
               update();
               return;
             }
-          }
-          if (res['id'] != null) {
-            Map<String, dynamic> data = {
-              "username": emailController.text,
-              "password": passwordController.text
-            };
-            Map result = await ApiService().loginUser(data);
-            if (result['token'] != null) {
-              CustomerModel customerModel =
-                  CustomerModel.fromJson(res as Map<String, dynamic>);
-              LoginResponseModel loginResponseModel =
-                  LoginResponseModel.fromJson(result as Map<String, dynamic>);
-              MySharedPref.setEmail(loginResponseModel.userEmail.toString());
-              MySharedPref.setUserId(customerModel.id.toString());
-              MySharedPref.setName(customerModel.firstName.toString());
-              MySharedPref.setToken(loginResponseModel.token.toString());
-              MySharedPref.setPhone(customerModel.billing!.phone.toString());
-              Get.snackbar(
-                'Message',
-                '${customerModel.firstName} Registered Successfully',
-                backgroundColor: kSuccessColor,
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                borderRadius: 10.0,
-                margin: const EdgeInsets.all(10.0),
-                isDismissible: true,
-                duration: const Duration(seconds: 3),
-              );
-              isLoading(false);
-              update();
-              print(res.toString());
-              Timer(const Duration(seconds: 2), () {
-                Get.offAllNamed(AppPages.HOME);
-              });
-            } else {
-              showSnackbar(
-                'Provide correct crentidals',
-              );
-              isLoading(false);
-              update();
-              return;
-            }
-          } else {
-            showSnackbar(
-              'Provide correct crentidals',
-            );
-            isLoading(false);
-            update();
-            return;
           }
         } else {
           showSnackbar(

@@ -91,16 +91,16 @@ class SideDrawer extends StatelessWidget {
             title: const Text('Profile'),
             onTap: () => {Get.toNamed(AppPages.PROFILE)},
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.location_on),
-          //   title: const Text('All locations'),
-          //   onTap: () => {Get.toNamed(AppPages.ALLLOCATIONS)},
-          // ),
-          // ListTile(
-          //   leading: const Icon(Icons.history),
-          //   title: const Text('Order History'),
-          //   onTap: () => {Get.toNamed(AppPages.ORDER_HISTORY)},
-          // ),
+          ListTile(
+            leading: const Icon(Icons.location_on),
+            title: const Text('Academies'),
+            onTap: () => {Get.toNamed(AppPages.ACADEMY_LISTING)},
+          ),
+          ListTile(
+            leading: const Icon(Icons.history),
+            title: const Text('Venues'),
+            onTap: () => {Get.toNamed(AppPages.VENUE_LISTING)},
+          ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
@@ -111,7 +111,7 @@ class SideDrawer extends StatelessWidget {
           ),
           ExpansionTile(
             title: const Text(
-              "Settings & Support",
+              "Support",
               style: TextStyle(color: kSecondaryColor),
             ),
             initiallyExpanded: true,
@@ -138,7 +138,7 @@ class SideDrawer extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
+           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
               "assets/app_icon.jpg",
@@ -155,17 +155,16 @@ class SideDrawer extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      launch(('https://www.facebook.com/people/Better-Gas-Energy-Ltd/100089749420769/?mibextid=ZbWKwL'));
+                      launch(('https://www.facebook.com/tidasports/'));
                     },
                     child: Image.asset(
                       "assets/icons/facebook.png",
                       height: 30,
-                      color: kPrimaryColor,
                     )),
                 GestureDetector(
                     onTap: () {
-                      launchUrl(
-                          Uri.parse('https://www.instagram.com/bettergasng/'));
+                      launchurl(
+                          Uri.parse('https://www.instagram.com/tidasports/'));
                     },
                     child: Image.asset(
                       "assets/icons/instagram.png",
@@ -173,8 +172,8 @@ class SideDrawer extends StatelessWidget {
                     )),
                 GestureDetector(
                     onTap: () {
-                      launchUrl(Uri.parse(
-                          'https://www.linkedin.com/company/better-gas-ng/'));
+                      launchurl(Uri.parse(
+                          'https://www.linkedin.com/company/tidasports/'));
                     },
                     child: Image.asset(
                       "assets/icons/linkedIn.png",
@@ -182,11 +181,11 @@ class SideDrawer extends StatelessWidget {
                     )),
                 GestureDetector(
                     onTap: () {
-                      launchUrl(
-                          Uri.parse('https://twitter.com/i/flow/login?redirect_after_login=%2Fbettergasng'));
+                      launchurl(
+                          Uri.parse('https://www.youtube.com/@tidasports'));
                     },
                     child: Image.asset(
-                      "assets/user.png",
+                      "assets/icons/youtube.png",
                       height: 30,
                     )),
               ],

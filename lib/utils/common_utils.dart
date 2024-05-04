@@ -22,6 +22,12 @@ Future<void> makePhoneCall(String phoneNumber) async {
   }
 }
 
+  Future launchurl(Uri _url) async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
 bool? isPasswordCompliant(String password, [int minLength = 8]) {
   if (password == null || password.isEmpty) {
     return false;

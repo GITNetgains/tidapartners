@@ -12,6 +12,7 @@ const kCyanColor = Color(0xff56C4CF);
 const kSuccessColor = Color.fromARGB(255, 76, 175, 80);
 const klightgrey = Color.fromARGB(255, 247, 244, 244);
 const kDarkGrey = Color.fromARGB(255, 239, 236, 236);
+const kGreySecondaryColor = Color.fromARGB(255, 22, 21, 21);
 const kblack = Color(0xff000000);
 const kofferColor = Color.fromARGB(255, 240, 227, 111);
 const kLightGradient = [Color(0xffEEFFFA), Color(0xffCEF2F6)];

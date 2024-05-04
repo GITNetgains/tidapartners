@@ -93,7 +93,7 @@ class ApiService extends ApiInterface {
 
   Future<Map> createUserAccount(Map<String, dynamic> data) async {
     http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.createCustomer, data: data);
+        url: ApiInterface.baseUrl + Endpoints.createPartner, data: data);
     return _parseBaseResponse(res) ?? {};
   }
 
@@ -111,9 +111,7 @@ class ApiService extends ApiInterface {
   Future<Map> forgotPassword(String email) async {
     http.Response res = await postApi(
         url: ApiInterface.baseUrl + Endpoints.forgotPassword,
-        data: {
-          "email":email
-        });
+        data: {"email": email});
 
     return _parseBaseResponse(res) ?? {};
   }
@@ -160,31 +158,6 @@ class ApiService extends ApiInterface {
     return _parseBaseResponse(res) ?? {};
   }
 
-  Future<Map<String, dynamic>> createOrdernotes(
-      Map<String, dynamic> data, String orderid) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl +
-            Endpoints.createOrder +
-            "/$orderid" +
-            Endpoints.ordernotes,
-        data: data);
-    return _parseBaseResponse(res) ?? {};
-  }
-
-  Future<Map<String, dynamic>> createOrder(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.createOrder, data: data);
-    return _parseBaseResponse(res) ?? {};
-  }
-
-  Future<Map<String, dynamic>> updateOrder(
-      Map<String, dynamic> data, String orderid) async {
-    http.Response res = await putApi(
-        url: ApiInterface.baseUrl + Endpoints.createOrder + "/$orderid",
-        data: data);
-    return _parseBaseResponse(res) ?? {};
-  }
-
   Future<http.Response> getOrdersList(String orderlistCustoms) async {
     http.Response res = await getApi(
         url: ApiInterface.baseUrl + Endpoints.orders + orderlistCustoms,
@@ -196,93 +169,48 @@ class ApiService extends ApiInterface {
     return res;
   }
 
-  Future<http.Response> fetchProductsList() async {
-    http.Response res = await getApi(
-        url:
-            "${ApiInterface.baseUrl}${Endpoints.getProducts}?consumer_key=${ApiInterface.consumer_key}&consumer_secret=${ApiInterface.consumer_secret}");
-    return res;
-  }
-
-    Future<http.Response> fetchShowCaseList(Map<String,dynamic> data) async {
-     http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getAllShowCase, data: data);
-
-    return res;
-  }
-
-  Future<http.Response> fetchProduct(String id) async {
-    http.Response res = await getApi(
-        url: "${ApiInterface.baseUrl}${Endpoints.getProducts}/${id}");
-
-    return res;
-  }
-
-  Future<http.Response> fetchAcademyDetails(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getAcademyDetails, data: data);
-
-    return res;
-  }
-
-  Future<http.Response> fetchVenueDetails(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getVenueDetails, data: data);
-    return res;
-  }
-
-  Future<http.Response> fetchSlotDetails(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getSlotsById, data: data);
-    return res;
-  }
-  
-    Future<http.Response> bookSlot(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.createBookings, data: data);
-    return res;
-  }
-
-  Future<http.Response> getSearchNearByLoc(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.searchApiGetDatanearbyloc,
-        data: data);
-    return res;
-  }
-
-  Future<http.Response> getAllLocations(int pagenumber) async {
-    http.Response res = await getApi(
-        url: ApiInterface.baseUrl +
-            Endpoints.getAllLocations +
-            "?page=${pagenumber.toString()}");
-    return res;
-  }
-
-  Future<http.Response> getAllSports(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getAllSports, data: data);
-    print('${res.runtimeType} dfjlajsdflajsdlnlsn');
-    return res;
-  }
-
-  Future<http.Response> getItemBySport(Map<String, dynamic> data) async {
-    http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getItemBySport, data: data);
-    return res;
-  }
-
   Future<http.Response> getAcademyBookings(Map<String, dynamic> data) async {
     http.Response res = await postApi(
         url: ApiInterface.baseUrl + Endpoints.getAcademyBooking, data: data);
     return res;
   }
+
   Future<http.Response> getVenueBookings(Map<String, dynamic> data) async {
     http.Response res = await postApi(
         url: ApiInterface.baseUrl + Endpoints.getVenueBooking, data: data);
     return res;
   }
-  Future<http.Response> getSubscriptionBookings(Map<String, dynamic> data) async {
+
+  Future<http.Response> getSubscriptionBookings(
+      Map<String, dynamic> data) async {
     http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getSubscriptionsBooking, data: data);
+        url: ApiInterface.baseUrl + Endpoints.getSubscriptionsBooking,
+        data: data);
+    return res;
+  }
+
+  Future<http.Response> getListAcademies(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.getProductsByPartner, data: data);
+    return res;
+  }
+
+  Future<http.Response> getListVenues(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.getProductsByPartner, data: data);
+    return res;
+  }
+
+  Future<http.Response> getFCMToken(Map<String,dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.getFCMToken, data: data
+        );
+    return res;
+  }
+  Future<http.Response> updateFCMToken(Map<String,dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.updateFCMToken, data: data
+        );
     return res;
   }
 }

@@ -112,25 +112,25 @@ class SignInScreen extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('Login as '),
-                              GestureDetector(
-                                onTap: () => {
-                                  controller.loginCustomer(
-                                      "guest@gmail.com", "12345@Dk"),
-                                },
-                                child: const Text(
-                                  'Guest',
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     const Text('Login as '),
+                          //     GestureDetector(
+                          //       onTap: () => {
+                          //         controller.loginCustomer(
+                          //             "guest@gmail.com", "12345@Dk"),
+                          //       },
+                          //       child: const Text(
+                          //         'Guest',
+                          //         style: TextStyle(
+                          //           color: kPrimaryColor,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
