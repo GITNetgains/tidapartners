@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../../config/Strings.dart';
 import '../../../../utils/constants.dart';
 import '../../../components/elevatedbutton.dart';
 import '../../../components/show_loader.dart';
@@ -27,11 +29,25 @@ class SignUpScreen extends StatelessWidget {
                         children: [
                           Image.asset(
                             AppImages.kappicon,
-                            width: 150,
-                            height: 150,
+                            width: 150.w,
+                            height: 150.h,
                             filterQuality: FilterQuality.high,
                           ),
-                          const SizedBox(height: 20),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16.0.w, vertical: 8.0.h),
+                            child: Text(
+                              Strings.transforming.toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
+
                           MyTextField(
                             textController: controller.nameController,
                             firstImage: AppImages.kuser,
@@ -54,8 +70,8 @@ class SignUpScreen extends StatelessWidget {
                           MyTextField(
                             textController: controller.emailController,
                             firstImage: AppImages.kpassword,
-                            firstText: 'Email Id',
-                            hintText: 'enter your Email Id',
+                            firstText: 'Email',
+                            hintText: 'Enter your Email',
                             keyboardType: TextInputType.emailAddress,
                             isPassword: false,
                           ),
@@ -63,7 +79,7 @@ class SignUpScreen extends StatelessWidget {
                             textController: controller.passwordController,
                             firstImage: AppImages.kpassword,
                             firstText: 'Password',
-                            hintText: 'enter your Password',
+                            hintText: 'Enter your Password',
                             keyboardType: TextInputType.visiblePassword,
                             isPassword: true,
                             isObscure: controller.isPasswordView,
@@ -80,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                                   controller.confirmPasswordController,
                               firstImage: AppImages.kpassword,
                               firstText: 'Confirm password',
-                              hintText: 'enter your Password',
+                              hintText: 'Enter your Password',
                               keyboardType: TextInputType.visiblePassword,
                               isPassword: true,
                               isObscure: controller.isConfirmPasswordView,
@@ -93,7 +109,7 @@ class SignUpScreen extends StatelessWidget {
                                       : Icons.remove_red_eye_outlined))),
                           MyButton(
                             ontap: () {
-                            // Get.toNamed(AppPages.HOME);
+                              // Get.toNamed(AppPages.HOME);
                               controller.signUp();
                             },
                             text: 'Register',
@@ -102,7 +118,7 @@ class SignUpScreen extends StatelessWidget {
                           //     imagePath: 'assets/search.png',
                           //     buttonText: 'Sign Up with Google',
                           //     onPressed: () => {}),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -111,7 +127,7 @@ class SignUpScreen extends StatelessWidget {
                                 onTap: () => {
                                   Get.toNamed(AppPages.SIGNIN),
                                 },
-                                child: Text('Login here',
+                                child: Text(' Login here',
                                     style: TextStyle(
                                       color: controller.textColor,
                                       fontWeight: FontWeight.bold,

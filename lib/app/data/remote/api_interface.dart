@@ -7,6 +7,7 @@ abstract class ApiInterface {
   static String consumer_secret = 'cs_24722f47f9f76230d1b0f41062050eabb74cacbb';
   static const baseUrl = "https://tidasports.com/wp-json";
   static const imgPath = "https://tidasports.com/wp-json";
+  static const notificationServiceUrl = "https://tida-notification-service.onrender.com";
 
   static String? auth =
       'Basic ${base64.encode(utf8.encode('$consumer_key:$consumer_secret'))}';

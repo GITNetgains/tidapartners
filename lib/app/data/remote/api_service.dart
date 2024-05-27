@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../service/dialog_helper.dart';
 import '../local/my_shared_pref.dart';
@@ -201,16 +204,108 @@ class ApiService extends ApiInterface {
     return res;
   }
 
-  Future<http.Response> getFCMToken(Map<String,dynamic> data) async {
+  Future<Map<String, dynamic>> updateOrder(
+      Map<String, dynamic> data, String orderid) async {
+    http.Response res = await putApi(
+        url: ApiInterface.baseUrl + Endpoints.createOrder + "/$orderid",
+        data: data);
+    return _parseBaseResponse(res) ?? {};
+  }
+
+  Future<http.Response> getFCMToken(Map<String, dynamic> data) async {
     http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.getFCMToken, data: data
-        );
+        url: ApiInterface.baseUrl + Endpoints.getFCMToken, data: data);
     return res;
   }
-  Future<http.Response> updateFCMToken(Map<String,dynamic> data) async {
+
+  Future<http.Response> updateFCMToken(Map<String, dynamic> data) async {
     http.Response res = await postApi(
-        url: ApiInterface.baseUrl + Endpoints.updateFCMToken, data: data
-        );
+        url: ApiInterface.baseUrl + Endpoints.updateFCMToken, data: data);
     return res;
+  }
+
+  Future<http.Response> updateProfileImage(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.updateProfileImg, data: data);
+    return res;
+  }
+
+  Future<http.Response> togglecodpayment(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.togglepayment, data: data);
+    return res;
+  }
+
+  Future<http.Response> availablecodoption(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.codoption, data: data);
+    return res;
+  }
+
+  Future<Map<String, dynamic>> createOrdernotes(
+      Map<String, dynamic> data, String orderid) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl +
+            Endpoints.createOrder +
+            "/$orderid" +
+            Endpoints.ordernotes,
+        data: data);
+    return _parseBaseResponse(res) ?? {};
+  }
+
+  static dynamic returnResponse(http.Response response) {
+    try {
+      dynamic responseJson = /*jsonDecode(*/ response.body /*)*/;
+      debugPrint("RESPONSE $responseJson");
+      return responseJson;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  static Future sendBookingNotification(
+      String customerUserId, String orderId) async {
+    String user_id = MySharedPref.getUserId() ?? "0";
+    late String fcmToken;
+    try {
+      fcmToken = await FirebaseMessaging.instance.getToken() ?? "";
+    } catch (e) {
+      // Get.snackbar("Error",
+      //     "An error has occured",
+      //     backgroundColor: Colors.red,
+      //     colorText: Colors.white,
+      //     snackPosition: SnackPosition.BOTTOM);
+      print(e);
+    }
+
+    try {
+      var client = http.Client();
+      dynamic responseJson;
+      Map body = {
+        "userid": user_id,
+        "fcmToken": fcmToken,
+        "order_id": orderId,
+        "customerUserId": customerUserId
+      };
+      print(body);
+      final response = await client.post(
+        Uri.parse(ApiInterface.notificationServiceUrl +
+            Endpoints.sendBookingNotification),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+      responseJson = returnResponse(response);
+      return responseJson;
+    } catch (e) {
+      // print("++++++++++++++++++++++++++++++++++++++++++++++");
+      print(e);
+      Get.snackbar("Internet Connectivity Error",
+          "Please Check your internet connection",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }

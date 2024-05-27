@@ -17,7 +17,7 @@ class SplashController extends GetxController {
       if (validation.value) {
         Get.offAllNamed(AppPages.HOME);
       } else {
-        Get.offAllNamed(AppPages.SIGNUP);
+        Get.offAllNamed(AppPages.SIGNIN);
       }
     });
     update();

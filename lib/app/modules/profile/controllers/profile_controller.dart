@@ -1,21 +1,44 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 import '../../../../utils/colors.dart';
 import '../../../data/local/my_shared_pref.dart';
 import '../../../data/models/customer_model.dart';
+import '../../../data/remote/api_interface.dart';
 import '../../../data/remote/api_service.dart';
+import '../../../data/remote/endpoints.dart';
 import '../models/academy_model.dart';
 import '../models/venue_model.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
+  bool light0 = true;
+
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return const Icon(Icons.check);
+      }
+      return const Icon(Icons.close);
+    },
+  );
+
   bool isLoading = false;
   var name = MySharedPref.getName().obs;
   var job = MySharedPref.getEmail().obs;
   var location = MySharedPref.getcity().obs;
   AcademyModel academyDataModel = AcademyModel();
   VenueModel venueModel = VenueModel();
+  File? croppedFile;
+  XFile? selectedAvatar;
+  String? userImage;
+  bool? isUploading = false;
 
   final TextEditingController nameController =
       TextEditingController(text: MySharedPref.getName());
@@ -28,6 +51,88 @@ class ProfileController extends GetxController {
     name.value = newName;
     job.value = newJob;
     location.value = newLocation;
+  }
+
+  Future<bool> checkcod() async {
+    dynamic res =
+        await ApiService().availablecodoption({"partnerid": MySharedPref.getUserId()});
+    res = jsonDecode(res.body);
+    print(res["enable_cod"]);
+    if (res["enable_cod"] == "1") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void updatecashmode() {
+    light0 = !light0;
+    dynamic res = ApiService().togglecodpayment({
+      "userid": MySharedPref.getUserId(),
+      "enable_cod": light0 == true ? "1" : "0"
+    });
+    update();
+  }
+
+  bool? isProperString(String? s) {
+    if (s != null && s.trim().isNotEmpty && s.trim() != "null") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void pickImage(ImageSource source) async {
+    selectedAvatar = await ImagePicker().pickImage(source: source);
+    print(selectedAvatar?.path);
+    if (selectedAvatar != null) {
+      CroppedFile? cf = await ImageCropper().cropImage(
+        sourcePath: selectedAvatar!.path,
+        cropStyle: CropStyle.circle,
+        compressFormat: ImageCompressFormat.jpg,
+        compressQuality: 20,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop Image',
+            toolbarColor: Colors.red,
+            toolbarWidgetColor: Colors.white,
+          ),
+          IOSUiSettings(
+            title: 'Crop Image',
+          ),
+        ],
+      );
+      if (cf != null) {
+        croppedFile = File(cf.path);
+      }
+    }
+    update();
+  }
+
+  Future<void> addPropicApi2() async {
+    // var headers = {
+    //   'Content-Type': 'multipart/form-data;',
+    // };
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(ApiInterface.baseUrl + Endpoints.updateProfileImg));
+    request.fields.addAll({
+      'user_id': MySharedPref.getUserId().toString(),
+    });
+    if (croppedFile != null) {
+      request.files.add(
+          await http.MultipartFile.fromPath('async-upload', croppedFile!.path));
+    }
+    // request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      var res = await response.stream.transform(utf8.decoder).join();
+      Map<String, dynamic> data = json.decode(res);
+      MySharedPref.setAvatar(data["data"]["profile_url"]);
+      userImage = data["data"]["profile_url"];
+      update();
+    }
   }
 
   Future<void> editProfileDetails() async {
@@ -60,6 +165,9 @@ class ProfileController extends GetxController {
             customerModel.firstName!.isNotEmpty &&
             customerModel.billing!.phone!.isNotEmpty) {
           print(customerModel);
+          if (selectedAvatar != null) {
+            await addPropicApi2();
+          }
           MySharedPref.setEmail(customerModel.email.toString());
           MySharedPref.setName(customerModel.firstName.toString());
           MySharedPref.setPhone(customerModel.billing!.phone.toString());
@@ -100,6 +208,7 @@ class ProfileController extends GetxController {
   void onInit() async {
     isLoading = true;
     update();
+    light0 = await checkcod();
     await Future.wait([getAcademies(), getVenues()]);
     isLoading = false;
     update();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/constants.dart';
@@ -9,7 +10,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../widgets/table.dart';
-
 
 class VenueDetailsView extends StatelessWidget {
   const VenueDetailsView({Key? key});
@@ -22,25 +22,25 @@ class VenueDetailsView extends StatelessWidget {
         return controller.isLoading.value
             ? ShowLoader()
             : Scaffold(
-              appBar: AppBar(
-              iconTheme: const IconThemeData(color: kWhiteColor),
-              toolbarHeight: Get.height / 12,
-              centerTitle: true,
-              backgroundColor: kPrimaryColor,
-              title: Text(
-                "${controller.venueDataModel.title}",
-                style: const TextStyle(
-                    color: kWhiteColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                appBar: AppBar(
+                  iconTheme: const IconThemeData(color: kWhiteColor),
+                  toolbarHeight: Get.height / 12,
+                  centerTitle: true,
+                  backgroundColor: kPrimaryColor,
+                  title: Text(
+                    "${controller.venueDataModel.title}",
+                    style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ),
                 ),
-              ),
-            ),
                 body: SingleChildScrollView(
                   child: SafeArea(
                     child: Column(
@@ -54,9 +54,9 @@ class VenueDetailsView extends StatelessWidget {
                                 aspectRatio: 16 / 9,
                                 viewportFraction: 1.0,
                                 initialPage: 0,
-                                enableInfiniteScroll: true,
+                                enableInfiniteScroll: false,
                                 reverse: false,
-                                autoPlay: true,
+                                autoPlay: false,
                                 autoPlayInterval: Duration(seconds: 3),
                                 autoPlayAnimationDuration:
                                     Duration(milliseconds: 800),
@@ -88,17 +88,15 @@ class VenueDetailsView extends StatelessWidget {
                               ]),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12.0, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12.0.w, vertical: 10.h),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    controller.venueDataModel.title
-                                        .toString(),
+                                Text(controller.venueDataModel.title.toString(),
                                     style: TextStyle(
                                         color: kHeadingColor,
-                                        fontSize: 18.0,
+                                        fontSize: 18.0.sp,
                                         fontWeight: FontWeight.w700)),
                                 controller.venueDataModel.address != ""
                                     ? Row(
@@ -108,14 +106,14 @@ class VenueDetailsView extends StatelessWidget {
                                           Icon(
                                             Icons.location_on_outlined,
                                             color: Colors.red,
-                                            size: 18,
+                                            size: 18.sp,
                                           ),
                                           Expanded(
                                             child: Text(
-                                              controller
-                                                  .venueDataModel.address
+                                              controller.venueDataModel.address
                                                   .toString(),
-                                              style: TextStyle(fontSize: 12.0),
+                                              style:
+                                                  TextStyle(fontSize: 12.0.sp),
                                             ),
                                           ),
                                         ],
@@ -126,187 +124,193 @@ class VenueDetailsView extends StatelessWidget {
                                   'Description',
                                   style: TextStyle(
                                       color: kHeadingColor,
-                                      fontSize: 18.0,
+                                      fontSize: 18.0.sp,
                                       fontWeight: FontWeight.w700),
-                                ),
-                                Text(controller.venueDataModel.content
-                                    .toString(), textAlign: TextAlign.left,),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                _buildTable([
-                                  _buildTableRow(
-                                      "Flood Lights",
-                                      controller.venueDataModel.floodLights ==
-                                              true
-                                          ? "Yes"
-                                          : "No"),
-                                ]),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Amenities',
-                                        style: TextStyle(
-                                            color: kHeadingColor,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SimpleTable(
-                                  controller: controller,
-                                ),
-                                SizedBox(
-                                  height: 10,
                                 ),
                                 Text(
-                                  'Slots',
-                                  style: TextStyle(
-                                      color: kHeadingColor,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w700),
+                                  controller.venueDataModel.content.toString(),
+                                  textAlign: TextAlign.left,
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 20.h,
                                 ),
-                                 controller.venueDataModel.slots != null 
-                                  ? ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: controller.uniqueSlots.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                                border: Border.all(
-                                                  color: kPrimaryColor,
-                                                  width: 1.0,
-                                                )),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12.0,
-                                                      vertical: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "${controller.uniqueSlots[index].slotName}",
-                                                        style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      Text(
-                                                        '₹ ${controller.uniqueSlots[index].slotCost} (${controller.uniqueSlots[index].interval})',
-                                                        style: TextStyle(
-                                                            fontSize: 12.0),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                 
-                                                ],
-                                              ),
+                                controller.venueDataModel.amenities != null
+                                    ? controller.venueDataModel.amenities!
+                                            .isNotEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8.h),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Amenities',
+                                                  style: TextStyle(
+                                                      color: kHeadingColor,
+                                                      fontSize: 18.0.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        );
-                                      })
-                                  : Text("No Slots Available"),
-                        //         ListView.builder(
-                        //             shrinkWrap: true,
-                        //             physics: NeverScrollableScrollPhysics(),
-                        //             itemCount: controller
-                        //                 .venueDataModel.slots?.length,
-                        //             itemBuilder: (context, index) {
-                        //               return Card(
-                        //                 color: const Color.fromARGB(
-                        //                     255, 7, 50, 113),
-                        //                 shape: RoundedRectangleBorder(
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(12.0),
-                        //                 ),
-                        //                 child: ListTile(
-                        //                   title: Row(
-                        //                     children: [
-                        //                       Expanded(
-                        //                         child: Column(
-                        //                           crossAxisAlignment:
-                        //                               CrossAxisAlignment.start,
-                        //                           children: [
-                        //                             // Text(
-                        //                             //   controller
-                        //                             //       .venueDataModel
-                        //                             //       .packages![index]
-                        //                             //       .name
-                        //                             //       .toString(),
-                        //                             //   style: TextStyle(
-                        //                             //       color: kWhiteColor,
-                        //                             //       fontSize: 16),
-                        //                             // ),
-                        //                             // Text(
-                        //                             //   controller
-                        //                             //       .venueDataModel
-                        //                             //       .slots![index]
-                        //                             //       .content
-                        //                             //       .toString(),
-                        //                             //   style: TextStyle(
-                        //                             //     fontSize: 10,
-                        //                             //     color: Colors.white,
-                        //                             //   ),
-                        //                             // ),
-                        //                             SizedBox(height: 4.0),
-                        //                           ],
-                        //                         ),
-                        //                       ),
-                        //                       Column(
-                        //                         crossAxisAlignment:
-                        //                             CrossAxisAlignment.end,
-                        //                         children: [
-                        //                           Text(
-                        //                             '${krupeeValue} ${controller.venueDataModel.slots![index].toString()}',
-                        //                             style: TextStyle(
-                        //                                 color: kPrimaryColor,
-                        //                                 fontSize: 18,
-                        //                                 fontWeight:
-                        //                                     FontWeight.bold),
-                        //                           ),
-                        //                           SizedBox(height: 8.0),
-                        //                         ],
-                        //                       )
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               );
-                        //             }),
-                                ContactBar(text: 'Have a Question? Call Us'),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '*Terms & Conditions Apply',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 12),
-                                  ),
+                                          )
+                                        : SizedBox.shrink()
+                                    : SizedBox.shrink(),
+                                controller.venueDataModel.amenities != null
+                                    ? controller.venueDataModel.amenities!
+                                            .isNotEmpty
+                                        ? SimpleTable(
+                                            controller: controller,
+                                          )
+                                        : SizedBox.shrink()
+                                    : SizedBox.shrink(),
+                                SizedBox(
+                                  height: 10.h,
                                 ),
-                                Padding(
-                                    padding: const EdgeInsets.only(bottom: 30))
+                                // Text(
+                                //   'Slots',
+                                //   style: TextStyle(
+                                //       color: kHeadingColor,
+                                //       fontSize: 18.0,
+                                //       fontWeight: FontWeight.w700),
+                                // ),
+                                // SizedBox(
+                                //   height: 10,
+                                // ),
+                                //  controller.venueDataModel.slots != null
+                                //   ? ListView.builder(
+                                //       shrinkWrap: true,
+                                //       physics: NeverScrollableScrollPhysics(),
+                                //       itemCount: controller.uniqueSlots.length,
+                                //       itemBuilder: (context, index) {
+                                //         return Padding(
+                                //           padding: const EdgeInsets.all(8.0),
+                                //           child: Container(
+                                //             decoration: BoxDecoration(
+                                //                 color: Colors.white,
+                                //                 borderRadius:
+                                //                     BorderRadius.circular(12.0),
+                                //                 border: Border.all(
+                                //                   color: kPrimaryColor,
+                                //                   width: 1.0,
+                                //                 )),
+                                //             child: Padding(
+                                //               padding:
+                                //                   const EdgeInsets.symmetric(
+                                //                       horizontal: 12.0,
+                                //                       vertical: 10),
+                                //               child: Row(
+                                //                 mainAxisAlignment:
+                                //                     MainAxisAlignment
+                                //                         .spaceBetween,
+                                //                 children: [
+                                //                   Column(
+                                //                     crossAxisAlignment:
+                                //                         CrossAxisAlignment
+                                //                             .start,
+                                //                     children: [
+                                //                       Text(
+                                //                         "${controller.uniqueSlots[index].slotName}",
+                                //                         style: TextStyle(
+                                //                             fontSize: 14.0,
+                                //                             fontWeight:
+                                //                                 FontWeight
+                                //                                     .bold),
+                                //                       ),
+                                //                       Text(
+                                //                         '₹ ${controller.uniqueSlots[index].slotCost} (${controller.uniqueSlots[index].interval})',
+                                //                         style: TextStyle(
+                                //                             fontSize: 12.0),
+                                //                       ),
+                                //                     ],
+                                //                   ),
+
+                                //                 ],
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         );
+                                //       })
+                                //   : Text("No Slots Available"),
+                                //         ListView.builder(
+                                //             shrinkWrap: true,
+                                //             physics: NeverScrollableScrollPhysics(),
+                                //             itemCount: controller
+                                //                 .venueDataModel.slots?.length,
+                                //             itemBuilder: (context, index) {
+                                //               return Card(
+                                //                 color: const Color.fromARGB(
+                                //                     255, 7, 50, 113),
+                                //                 shape: RoundedRectangleBorder(
+                                //                   borderRadius:
+                                //                       BorderRadius.circular(12.0),
+                                //                 ),
+                                //                 child: ListTile(
+                                //                   title: Row(
+                                //                     children: [
+                                //                       Expanded(
+                                //                         child: Column(
+                                //                           crossAxisAlignment:
+                                //                               CrossAxisAlignment.start,
+                                //                           children: [
+                                //                             // Text(
+                                //                             //   controller
+                                //                             //       .venueDataModel
+                                //                             //       .packages![index]
+                                //                             //       .name
+                                //                             //       .toString(),
+                                //                             //   style: TextStyle(
+                                //                             //       color: kWhiteColor,
+                                //                             //       fontSize: 16),
+                                //                             // ),
+                                //                             // Text(
+                                //                             //   controller
+                                //                             //       .venueDataModel
+                                //                             //       .slots![index]
+                                //                             //       .content
+                                //                             //       .toString(),
+                                //                             //   style: TextStyle(
+                                //                             //     fontSize: 10,
+                                //                             //     color: Colors.white,
+                                //                             //   ),
+                                //                             // ),
+                                //                             SizedBox(height: 4.0),
+                                //                           ],
+                                //                         ),
+                                //                       ),
+                                //                       Column(
+                                //                         crossAxisAlignment:
+                                //                             CrossAxisAlignment.end,
+                                //                         children: [
+                                //                           Text(
+                                //                             '${krupeeValue} ${controller.venueDataModel.slots![index].toString()}',
+                                //                             style: TextStyle(
+                                //                                 color: kPrimaryColor,
+                                //                                 fontSize: 18,
+                                //                                 fontWeight:
+                                //                                     FontWeight.bold),
+                                //                           ),
+                                //                           SizedBox(height: 8.0),
+                                //                         ],
+                                //                       )
+                                //                     ],
+                                //                   ),
+                                //                 ),
+                                //               );
+                                //             }),
+                                ContactBar(text: 'Have a Question? Call Us'),
+                                // Align(
+                                //   alignment: Alignment.center,
+                                //   child: Text(
+                                //     '*Terms & Conditions Apply',
+                                //     textAlign: TextAlign.center,
+                                //     style: TextStyle(fontSize: 12),
+                                //   ),
+                                // ),
+                                // Padding(
+                                //     padding: const EdgeInsets.only(bottom: 30))
                               ]),
                         )
                       ],

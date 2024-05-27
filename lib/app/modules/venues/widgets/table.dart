@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tidapartners/app/modules/venues/controllers/venue_details_controller.dart';
 
 import '../../profile/models/venue_model.dart';
+
 class SimpleTable extends StatelessWidget {
   final VenueDetailsController controller;
 
@@ -75,52 +76,34 @@ class SimpleTable extends StatelessWidget {
     int numItems = amenitiesList.length;
     //int numRows = (numItems / 3).ceil(); // Calculate number of rows needed
 
-    for (int i = 0; i < numItems; i += 3) {
+    for (int i = 0; i < numItems; i += 2) {
       print(amenitiesList[i]);
-      if (i + 3 < numItems) {
+      if (i + 2 <= numItems) {
         rows.add(TableRow(children: [
           TableCell(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
                     "assets/aminities/${amenitiesList[i].enumName}.png",
                     height: 15.h,
                     width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/aminities/wifi.png",
+                        height: 15.h,
+                        width: 15.w,
+                      );
                     },
                   ),
-                  Center(
-                    child: Text(amenitiesList[i].displayName ?? "Rest Room"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          TableCell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i+1].enumName}.png",
-                    height: 15.h,
-                    width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
-                    },
-                  ),
-                  Center(
-                    child: Text(
-                      amenitiesList[i + 1].displayName ?? "Rest Room",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                  Container(
+                    // width: 70.w,
+                    padding: EdgeInsets.only(left: 4.w),
+
+                    child: Center(
+                      child: Text(amenitiesList[i].displayName ?? "Rest Room"),
                     ),
                   ),
                 ],
@@ -133,25 +116,60 @@ class SimpleTable extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    "assets/aminities/${amenitiesList[i+2].enumName}.png",
+                    "assets/aminities/${amenitiesList[i + 1].enumName}.png",
                     height: 15.h,
                     width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/aminities/wifi.png",
+                        height: 15.h,
+                        width: 15.w,
+                      );
                     },
                   ),
-                  Center(
-                    child:
-                        Text(amenitiesList[i + 2].displayName ?? "Rest Room"),
+                  Container(
+                    // width: 70.w,
+                    padding: EdgeInsets.only(left: 4.w),
+
+                    child: Center(
+                      child:
+                          Text(amenitiesList[i + 1].displayName ?? "Rest Room"),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
+          // TableCell(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Row(
+          //       children: [
+          //         Image.asset(
+          //           "assets/aminities/${amenitiesList[i + 2].enumName}.png",
+          //           height: 15.h,
+          //           width: 15.w,
+          //           errorBuilder: (context, error, stackTrace) {
+          //             return Image.asset(
+          //               "assets/aminities/wifi.png",
+          //               height: 15.h,
+          //               width: 15.w,
+          //             );
+          //           },
+          //         ),
+          //         Container(
+          //           width: 70.w,
+          //           child: Center(
+          //             child: Text(
+          //                  amenitiesList[i + 2].displayName ?? "Rest Room"),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ]));
-      } else if (i + 2 < numItems) {
+      } else if (i + 1 <= numItems) {
         rows.add(TableRow(children: [
           TableCell(
             child: Padding(
@@ -162,72 +180,89 @@ class SimpleTable extends StatelessWidget {
                     "assets/aminities/${amenitiesList[i].enumName}.png",
                     height: 15.h,
                     width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        "assets/aminities/wifi.png",
+                        height: 15.h,
+                        width: 15.w,
+                      );
                     },
                   ),
-                  Center(
-                    child: Text(amenitiesList[i].displayName ?? "Rest Room"),
+                  Container(
+                    // width: 70.w,
+                    padding: EdgeInsets.only(left: 4.w),
+
+                    child: Center(
+                      child: Text(amenitiesList[i].displayName ?? "Rest Room"),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          TableCell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i+1].enumName}.png",
-                    height: 15.h,
-                    width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
-                    },
-                  ),
-                  Center(
-                    child:
-                        Text(amenitiesList[i + 1].displayName ?? "Rest Room"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          TableCell(child: SizedBox.shrink())
-        ]));
-      } else {
-        rows.add(TableRow(children: [
-          TableCell(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i].enumName}.png",
-                    height: 15.h,
-                    width: 15.w,
-                    errorBuilder: (context, error, stackTrace) { return 
-                      Image.asset("assets/aminities/wifi.png",
-                    height: 15.h,
-                    width: 15.w,);
-                    },
-                  ),
-                  Center(
-                    child: Text(amenitiesList[i].displayName ?? "Rest Room"),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          TableCell(child: SizedBox.shrink()),
+          // TableCell(
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Row(
+          //       children: [
+          //         Image.asset(
+          //           "assets/aminities/${amenitiesList[i + 1].enumName}.png",
+          //           height: 15.h,
+          //           width: 15.w,
+          //           errorBuilder: (context, error, stackTrace) {
+          //             return Image.asset(
+          //               "assets/aminities/wifi.png",
+          //               height: 15.h,
+          //               width: 15.w,
+          //             );
+          //           },
+          //         ),
+          //         Container(
+          //           width: 70.w,
+          //           child: Center(
+          //             child: Text( amenitiesList[i + 1].displayName ?? "Rest Room"),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           TableCell(child: SizedBox.shrink())
         ]));
       }
+      //   else {
+      //     rows.add(TableRow(children: [
+      //       TableCell(
+      //         child: Padding(
+      //           padding: const EdgeInsets.all(8.0),
+      //           child: Row(
+      //             children: [
+      //               Image.asset(
+      //                 "assets/aminities/${amenitiesList[i].enumName}.png",
+      //                 height: 15.h,
+      //                 width: 15.w,
+      //                 errorBuilder: (context, error, stackTrace) {
+      //                   return Image.asset(
+      //                     "assets/aminities/wifi.png",
+      //                     height: 15.h,
+      //                     width: 15.w,
+      //                   );
+      //                 },
+      //               ),
+      //               Container(
+      //                 width: 70.w,
+      //                 child: Center(
+      //                   child: Text( amenitiesList[i].displayName ?? "Rest Room"),
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //       ),
+      //       TableCell(child: SizedBox.shrink()),
+      //       TableCell(child: SizedBox.shrink())
+      //     ]));
+      //   }
     }
     // for (int i = 0; i < numRows; i++) {
     //   List<Widget> cells = [];

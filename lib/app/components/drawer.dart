@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../utils/colors.dart';
@@ -27,7 +28,7 @@ class SideDrawer extends StatelessWidget {
               minVerticalPadding: 30,
               title: Text(
                 MySharedPref.getName().capitalize ?? "",
-                style: const TextStyle(color: kWhiteColor, fontSize: 25),
+                style: TextStyle(color: kWhiteColor, fontSize: 25.sp),
               ),
               subtitle: MySharedPref.getEmail() == "guest@email.com"
                   ? Container(
@@ -36,7 +37,7 @@ class SideDrawer extends StatelessWidget {
                     )
                   : Text(
                       MySharedPref.getEmail(),
-                      style: const TextStyle(color: kWhiteColor, fontSize: 16),
+                      style: TextStyle(color: kWhiteColor, fontSize: 16.sp),
                     ),
               // currentAccountPicture: Container(
               //   width: 120,
@@ -83,36 +84,51 @@ class SideDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            title: Text(
+              'Home',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('Profile'),
+            title: Text(
+              'Profile',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onTap: () => {Get.toNamed(AppPages.PROFILE)},
           ),
           ListTile(
             leading: const Icon(Icons.location_on),
-            title: const Text('Academies'),
+            title: Text(
+              'Academies',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onTap: () => {Get.toNamed(AppPages.ACADEMY_LISTING)},
           ),
           ListTile(
             leading: const Icon(Icons.history),
-            title: const Text('Venues'),
+            title: Text(
+              'Venues',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onTap: () => {Get.toNamed(AppPages.VENUE_LISTING)},
           ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
-            title: const Text('Logout'),
+            title: Text(
+              'Logout',
+              style: TextStyle(fontSize: 14.sp),
+            ),
             onTap: () {
               Get.offAllNamed(AppPages.SIGNIN);
               MySharedPref.clearSession();
             },
           ),
           ExpansionTile(
-            title: const Text(
+            title: Text(
               "Support",
-              style: TextStyle(color: kSecondaryColor),
+              style: TextStyle(color: kSecondaryColor, fontSize: 14.sp),
             ),
             initiallyExpanded: true,
             children: [
@@ -120,9 +136,12 @@ class SideDrawer extends StatelessWidget {
                 minLeadingWidth: 1,
                 dense: true,
                 leading: const Icon(Icons.support_agent_sharp),
-                title: const Text('Contact Us'),
+                title: Text(
+                  'Contact Us',
+                  style: TextStyle(fontSize: 14.sp),
+                ),
                 onTap: () {
-                  launchUrlString("https://bettergas.com/#",
+                  launchUrlString("https://tidasports.com/contact-us/",
                       mode: LaunchMode.externalApplication);
                 },
               ),
@@ -131,25 +150,25 @@ class SideDrawer extends StatelessWidget {
                 minLeadingWidth: 1,
                 dense: true,
                 leading: const Icon(Icons.phone_forwarded),
-                title: const Text('Call Us'),
+                title:  Text('Call Us',  style: TextStyle(fontSize: 14.sp),),
                 onTap: () {
-                  makePhoneCall("902-125-567");
+                  makePhoneCall("+918195944444");
                 },
               ),
             ],
           ),
-           Padding(
-            padding: const EdgeInsets.all(8.0),
+          Padding(
+            padding: EdgeInsets.all(8.0),
             child: Image.asset(
-              "assets/app_icon.jpg",
+              "assets/app_icon.png",
               fit: BoxFit.contain,
-              width: 120,
-              height: 100,
+              width: 120.w,
+              height: 100.h,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                top: 20.0, bottom: 20.0, left: 5.0, right: 5.0),
+            padding:  EdgeInsets.only(
+                top: 20.0.h, bottom: 20.0.h, left: 5.0.w, right: 5.0.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../config/Strings.dart';
 import '../../../../utils/colors.dart';
@@ -28,37 +29,39 @@ class SignInScreen extends StatelessWidget {
                         children: [
                           Image.asset(
                             AppImages.kappicon,
-                            width: 150,
-                            height: 150,
+                            width: 150.w,
+                            height: 150.h,
                             filterQuality: FilterQuality.high,
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 8.0),
+                            padding:  EdgeInsets.symmetric(
+                                horizontal: 16.0.w, vertical: 8.0.h),
                             child: Text(
                               Strings.transforming.toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 13,
+                              style:  TextStyle(
+                                fontSize: 13.sp,
                                 color: Colors.black,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                           SizedBox(height: 20.h),
                           MyTextField(
                             textController: controller.emailController,
                             firstImage: AppImages.kuser,
-                            firstText: 'Email Id',
-                            hintText: 'enter your Email Id',
+                            firstText: 'Email',
+                            hintText: 'Enter your Email',
+                            keyboardType: TextInputType.emailAddress,
                             isPassword: false,
                           ),
                           MyTextField(
                             textController: controller.passwordController,
                             firstImage: AppImages.kpassword,
                             firstText: 'Password',
-                            hintText: 'enter your Password',
+                            hintText: 'Enter your Password',
                             isPassword: true,
                             isObscure: controller.isPasswordView,
+                            keyboardType: TextInputType.visiblePassword,
                             suffixIcon: IconButton(
                                 onPressed: () {
                                   controller.changepasswordview();
@@ -79,14 +82,14 @@ class SignInScreen extends StatelessWidget {
                             onTap: () {
                               controller.forgotpassworddialog();
                             },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20.h),
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
                                   'Forgot Password?',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -110,7 +113,7 @@ class SignInScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 20.h,
                           ),
                           // Row(
                           //   mainAxisAlignment: MainAxisAlignment.center,

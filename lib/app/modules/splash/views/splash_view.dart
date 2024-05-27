@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../utils/colors.dart';
 import '../controllers/splash_controller.dart';
@@ -21,25 +22,25 @@ class SplashView extends StatelessWidget {
                 ),
                 Column(
                   children: [
-                    const SizedBox(height: 50),
+                     SizedBox(height: 50.h),
                     Image.asset(
                       'assets/tidatext.png',
-                      width: 200,
-                      height: 200,
+                      width: 200.w,
+                      height: 200.h,
                       filterQuality: FilterQuality.high,
                     ),
-                    const Text(
-                      "Transforming INDIA's",
+                     Text(
+                      "TRANSFORMING INDIA's",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: kblack,
                       ),
                     ),
-                    const Text(
+                     Text(
                       "DEVELOPING ATHLETES",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         color: kblack,
                       ),

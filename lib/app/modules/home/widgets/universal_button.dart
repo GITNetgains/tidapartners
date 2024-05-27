@@ -12,18 +12,16 @@ class UniversalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding:  EdgeInsets.all(4.dg),
-      decoration: BoxDecoration(color: kSecondaryColor,borderRadius: BorderRadius.circular(5.r)),
-      child: GestureDetector(
-        onTap: function,
-        child: Text(
-          name,
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: fontSize ?? 12.sp),
-        ),
+    return GestureDetector(
+      onTap: function,
+      child: Text(
+        name,
+        style: TextStyle(
+            color: kPrimaryColor,
+            decoration: TextDecoration.underline,
+            decorationColor: kPrimaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: fontSize ?? 12.sp),
       ),
     );
   }

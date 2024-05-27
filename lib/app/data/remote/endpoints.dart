@@ -12,6 +12,16 @@ class Endpoints {
   static const getSubscriptionsBooking =
       "/tidasports/v1/getpartnersubscriptionorders";
   static const getProductsByPartner = "/tidasports/v1/getproductbypartner";
-    static const getFCMToken = "/tida/v1/notification/find_fcm_token";
+  static const getFCMToken = "/tida/v1/notification/find_fcm_token";
   static const updateFCMToken = "/tida/v1/notification/update_fcm_token";
+  static const updateProfileImg = "/tida/v1/upload_profile_image";
+  static const togglepayment = "/tida/v1/cod_payment_toggle";
+  static const createOrder = "/wc/v3/orders";
+  static const ordernotes = "/notes";
+  static const sendBookingNotification = "/partner_notification";
+  static const codoption = "/tida/v1/get_available_payment";
+
+
+
+
 }

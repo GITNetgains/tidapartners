@@ -22,25 +22,25 @@ class AcademyDetailsView extends StatelessWidget {
         return controller.isLoading.value
             ? ShowLoader()
             : Scaffold(
-              appBar: AppBar(
-              iconTheme: const IconThemeData(color: kWhiteColor),
-              // toolbarHeight: Get.height / 12,
-              centerTitle: true,
-              backgroundColor: kPrimaryColor,
-              title: Text(
-                "${controller.academyDataModel.title}",
-                style:  TextStyle(
-                    color: kWhiteColor,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                appBar: AppBar(
+                  iconTheme: const IconThemeData(color: kWhiteColor),
+                  // toolbarHeight: Get.height / 12,
+                  centerTitle: true,
+                  backgroundColor: kPrimaryColor,
+                  title: Text(
+                    "${controller.academyDataModel.title}",
+                    style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                  ),
                 ),
-              ),
-            ),
                 body: SingleChildScrollView(
                   child: SafeArea(
                     child: Column(
@@ -54,9 +54,9 @@ class AcademyDetailsView extends StatelessWidget {
                                 aspectRatio: 16 / 9,
                                 viewportFraction: 1.0,
                                 initialPage: 0,
-                                enableInfiniteScroll: true,
+                                enableInfiniteScroll: false,
                                 reverse: false,
-                                autoPlay: true,
+                                autoPlay: false,
                                 autoPlayInterval: Duration(seconds: 3),
                                 autoPlayAnimationDuration:
                                     Duration(milliseconds: 800),
@@ -129,8 +129,11 @@ class AcademyDetailsView extends StatelessWidget {
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w700),
                                 ),
-                                Text(controller.academyDataModel.content
-                                    .toString(), textAlign: TextAlign.left,),
+                                Text(
+                                  controller.academyDataModel.content
+                                      .toString(),
+                                  textAlign: TextAlign.left,
+                                ),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -150,6 +153,11 @@ class AcademyDetailsView extends StatelessWidget {
                                   _buildTableRow(
                                       "Assistant Coach",
                                       controller
+                                          .academyDataModel.noOfAssistantCoach
+                                          .toString()),
+                                  _buildTableRow(
+                                      "No of Assistant Coaches",
+                                      controller
                                           .academyDataModel.assistantCoachName
                                           .toString()),
                                   _buildTableRow(
@@ -157,45 +165,51 @@ class AcademyDetailsView extends StatelessWidget {
                                       controller
                                           .academyDataModel.coachExperience
                                           .toString()),
-                                  _buildTableRow(
-                                      "Flood Lights",
-                                      controller.academyDataModel.floodLights ==
-                                              true
-                                          ? "Yes"
-                                          : "No"),
                                 ]),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Amenities',
-                                        style: TextStyle(
-                                            color: kHeadingColor,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SimpleTable(
-                                  controller: controller,
-                                ),
+                                controller.academyDataModel.amenities != null
+                                    ? controller.academyDataModel.amenities!
+                                            .isNotEmpty
+                                        ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8.h),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Amenities',
+                                                  style: TextStyle(
+                                                      color: kHeadingColor,
+                                                      fontSize: 18.0.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : SizedBox.shrink()
+                                    : SizedBox.shrink(),
+                                controller.academyDataModel.amenities != null
+                                    ? controller.academyDataModel.amenities!
+                                            .isNotEmpty
+                                        ? SimpleTable(
+                                            controller: controller,
+                                          )
+                                        : SizedBox.shrink()
+                                    : SizedBox.shrink(),
                                 SizedBox(
-                                  height: 10,
+                                  height: 10.h,
                                 ),
                                 Text(
                                   'Packages',
                                   style: TextStyle(
                                       color: kHeadingColor,
-                                      fontSize: 18.0,
+                                      fontSize: 18.0.sp,
                                       fontWeight: FontWeight.w700),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 10.h,
                                 ),
                                 ListView.builder(
                                     shrinkWrap: true,
@@ -208,7 +222,7 @@ class AcademyDetailsView extends StatelessWidget {
                                             255, 7, 50, 113),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(12.0),
+                                              BorderRadius.circular(12.0.r),
                                         ),
                                         child: ListTile(
                                           title: Row(
@@ -226,7 +240,7 @@ class AcademyDetailsView extends StatelessWidget {
                                                           .toString(),
                                                       style: TextStyle(
                                                           color: kWhiteColor,
-                                                          fontSize: 16),
+                                                          fontSize: 16.sp),
                                                     ),
                                                     Text(
                                                       controller
@@ -235,11 +249,11 @@ class AcademyDetailsView extends StatelessWidget {
                                                           .content
                                                           .toString(),
                                                       style: TextStyle(
-                                                        fontSize: 10,
+                                                        fontSize: 10.sp,
                                                         color: Colors.white,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 4.0),
+                                                    SizedBox(height: 4.0.h),
                                                   ],
                                                 ),
                                               ),
@@ -264,16 +278,16 @@ class AcademyDetailsView extends StatelessWidget {
                                       );
                                     }),
                                 ContactBar(text: 'Have a Question? Call Us'),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '*Terms & Conditions Apply',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.only(bottom: 30))
+                                // Align(
+                                //   alignment: Alignment.center,
+                                //   child: Text(
+                                //     '*Terms & Conditions Apply',
+                                //     textAlign: TextAlign.center,
+                                //     style: TextStyle(fontSize: 12),
+                                //   ),
+                                // ),
+                                // Padding(
+                                //     padding: const EdgeInsets.only(bottom: 30))
                               ]),
                         )
                       ],
@@ -315,12 +329,10 @@ TableCell _buildTableCell(String text,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Text(
         text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
         textAlign: alignment,
         style: TextStyle(
           fontWeight: color != kblack ? FontWeight.w600 : FontWeight.normal,
-          fontSize: 14,
+          fontSize: 13.sp,
           color: color,
         ),
       ),

@@ -10,13 +10,15 @@ class ShowLoader extends StatefulWidget {
 
 class _ShowLoaderState extends State<ShowLoader>
     with SingleTickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Image.asset(
-        AppImages.loading,
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
+      // Image.asset(
+      //   AppImages.loading,
+      // ),
       // ),
     );
   }

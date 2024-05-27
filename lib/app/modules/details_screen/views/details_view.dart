@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tidapartners/app/components/show_loader.dart';
 import 'package:tidapartners/app/modules/details_screen/controllers/details_controller.dart';
+import 'package:tidapartners/app/modules/profile/widgets/booknow_package.dart';
 import '../../../../utils/colors.dart';
+import '../../../../utils/common_utils.dart';
 import '../widgets/contact_bar.dart';
 
 class DetailsView extends StatelessWidget {
@@ -37,7 +40,7 @@ class DetailsView extends StatelessWidget {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
+            body:controller.isLoading.value ? ShowLoader() : SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
@@ -52,9 +55,9 @@ class DetailsView extends StatelessWidget {
                             border: Border.all(color: Colors.black12)),
                         child: Table(
                           columnWidths: {
-                            0: FlexColumnWidth(2),
-                            1: FlexColumnWidth(0.5),
-                            2: FlexColumnWidth(2),
+                            0: FlexColumnWidth(0.45),
+                            1: FlexColumnWidth(0.05),
+                            2: FlexColumnWidth(0.7),
                           },
                           children: controller.rows1,
                         ),
@@ -77,9 +80,9 @@ class DetailsView extends StatelessWidget {
                                   border: Border.all(color: Colors.black12)),
                               child: Table(
                                 columnWidths: {
-                                  0: FlexColumnWidth(2),
-                                  1: FlexColumnWidth(0.5),
-                                  2: FlexColumnWidth(2),
+                                  0: FlexColumnWidth(0.45),
+                                  1: FlexColumnWidth(0.05),
+                                  2: FlexColumnWidth(0.7),
                                 },
                                 children: controller.rows2[index],
                               ),
@@ -87,10 +90,82 @@ class DetailsView extends StatelessWidget {
                           ),
                         );
                       }),
+                  SizedBox(
+                    height: 40.h,
+                  ),
+                  (controller.bookingOrdersModel.status == "completed" ||
+                              controller.subscriptionOrdersModel.status ==
+                                  "completed" ||
+                              controller.venueOrdersModel.status ==
+                                  "completed") ||
+                          (controller.bookingOrdersModel.status ==
+                                  "cancelled" ||
+                              controller.subscriptionOrdersModel.status ==
+                                  "cancelled" ||
+                              controller.venueOrdersModel.status == "cancelled") || controller.venueOrdersModel.status != null
+                      ? SizedBox.shrink()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0.r),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  kPrimaryColor,
+                                ),
+                              ),
+                              onPressed: () {
+                                controller.remarks(() {
+                                  controller.completeOrder("completed");
+                                });
+                              },
+                              child: Text(
+                                'Accept',
+                                style: TextStyle(color: kWhiteColor),
+                              ),
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0.r),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  kPrimaryColor,
+                                ),
+                              ),
+                              onPressed: () {
+                                controller.remarks(() {
+                                  controller.completeOrder("cancelled");
+                                });
+                              },
+                              child: Text(
+                                'Reject',
+                                style: TextStyle(color: kWhiteColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                  controller.bookingOrdersModel.status == "completed" ||
+                          controller.subscriptionOrdersModel.status ==
+                              "completed" || controller.venueOrdersModel.status != null
+                      ? SizedBox.shrink()
+                      : SizedBox(
+                          height: 40.h,
+                        ),
                   ContactBar(text: 'Have a Question? Call Us'),
                 ],
               ),
-            ),
+            ) ,
           );
         });
   }
@@ -110,15 +185,13 @@ class DetailsView extends StatelessWidget {
     return TableCell(
       child: Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
         child: Text(
           text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
           textAlign: alignment,
           style: TextStyle(
             fontWeight: color != kblack ? FontWeight.w600 : FontWeight.normal,
-            fontSize: 14,
+            fontSize: 14.sp,
             color: color,
           ),
         ),

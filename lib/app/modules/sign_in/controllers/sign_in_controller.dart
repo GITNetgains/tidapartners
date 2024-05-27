@@ -93,11 +93,9 @@ class SignInController extends GetxController {
           isDismissible: true,
           duration: const Duration(seconds: 3),
         );
+        await Get.offAllNamed(AppPages.HOME);
         isLoading(false);
         update();
-        Timer(const Duration(seconds: 2), () {
-          Get.offAllNamed(AppPages.HOME);
-        });
       } else {
         print(res["message"]);
         Get.snackbar(
@@ -204,9 +202,7 @@ class SignInController extends GetxController {
             backgroundColor: kSuccessColor,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
-      }
-      else
-      {
+      } else {
         Get.snackbar("Server Response", "${res['message']}",
             backgroundColor: kPrimaryColor,
             colorText: Colors.white,

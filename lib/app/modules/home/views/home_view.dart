@@ -181,9 +181,9 @@ class HomeView extends StatelessWidget {
                 }),
               ),
               const Divider(color: kGreyColor),
-              const SizedBox(height: 10),
+               SizedBox(height: 10.h),
               SideHeadingWidget(name: 'Slots/Venues'),
-              const SizedBox(height: 10),
+               SizedBox(height: 10.h),
              controller.slotsDetailsList.isEmpty ? Center(child: Text("No Slots Booked")) : ListView.builder(
                 padding: const EdgeInsets.all(0),
                 itemCount: controller.slotsDetailsList.length,
@@ -204,14 +204,14 @@ class HomeView extends StatelessWidget {
                 }),
               ),
               const Divider(color: kGreyColor),
-              const SizedBox(height: 10),
+             SizedBox(height: 10.h),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: kSecondaryColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(10.dg),
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -220,20 +220,20 @@ class HomeView extends StatelessWidget {
                       'Total Bookings',
                       style: TextStyle(
                           color: kWhiteColor,
-                          fontSize: 25,
+                          fontSize: 25.sp,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       controller.totalOrders.toString(),
                       style: TextStyle(
                           color: kWhiteColor,
-                          fontSize: 35,
+                          fontSize: 35.sp,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 100),
+               SizedBox(height: 100.h),
             ]),
           );
         });

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -89,6 +90,7 @@ class HomeController extends GetxController {
       getAcademyOrders(),
       getVenueOrders(),
       getSubscriptionOrders(),
+      setupInteractedMessage()
     ]);
     isLoading = false;
     totalOrders = (bookingsDetailsList.length) +
@@ -97,6 +99,21 @@ class HomeController extends GetxController {
     update();
     super.onInit();
   }
+
+  Future<void> setupInteractedMessage() async {
+  try {
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (token != null)
+      await ApiService().updateFCMToken(
+          {"userid": MySharedPref.getUserId(), "fcm_token": token});
+  } catch (e) {
+    print(e);
+  }
+  FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+    await ApiService().updateFCMToken(
+        {"userid": MySharedPref.getUserId(), "fcm_token": token});
+  });
+}
 
   Future<void> selectStartDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -180,8 +197,8 @@ class HomeController extends GetxController {
             slotsDetailsList.add(DetailsModel(
                 imagePath:
                     "https://tidasports.com/wp-content/uploads/2024/03/20231221132816-2023-12-21tbl_academy132811.png",
-                name: element.items?.venue?.name ?? "N/A",
-                location: element.items?.venue?.address ?? "N/A",
+                name: element.items?.a?.name ?? "N/A",
+                location: element.items?.a?.address ?? "N/A",
                 noOfBookings: element.items?.slots?.length ?? 1));
           });
         }

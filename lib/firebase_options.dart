@@ -53,7 +53,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCXgXfc3g7eS7wvE6Vet_F6sGDgO45FGqA',
-    appId: '1:760921739188:android:d239e978797d971c022ce1',
+    appId: '1:760921739188:android:1f943e78ed222f48022ce1',
     messagingSenderId: '760921739188',
     projectId: 'tidasports-60eaa',
     databaseURL: 'https://tidasports-60eaa-default-rtdb.firebaseio.com',

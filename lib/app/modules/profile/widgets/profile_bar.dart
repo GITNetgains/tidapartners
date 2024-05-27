@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tidapartners/app/data/local/my_shared_pref.dart';
 
 import '../../../../utils/colors.dart';
 import '../views/profile_edit.dart';
@@ -74,8 +76,8 @@ class ProfileBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CircleAvatar(
-                        radius: 40.0,
-                        backgroundImage: AssetImage('assets/profile_image.png'),
+                        radius: 35.0.dg,
+                        backgroundImage: NetworkImage(MySharedPref.getAvatar() ?? ""),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

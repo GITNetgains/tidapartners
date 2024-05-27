@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tidapartners/utils/colors.dart';
 
 import '../../../components/snackBar.dart';
 import '../../../data/local/my_shared_pref.dart';
@@ -20,7 +21,7 @@ class SignUpController extends GetxController {
   SignInController signInController = SignInController();
   bool isPasswordView = true;
   bool isConfirmPasswordView = true;
-  late Color textColor = const Color(0xFF3463B4);
+  late Color textColor = kPrimaryColor;
 
   void changepasswordview() {
     isPasswordView = !isPasswordView;
@@ -120,7 +121,7 @@ class SignUpController extends GetxController {
                 isDismissible: true,
                 duration: const Duration(seconds: 3),
               );
-              Get.toNamed(AppPages.HOME);
+              await Get.offAllNamed(AppPages.HOME);
               isLoading(false);
               update();
               return;
