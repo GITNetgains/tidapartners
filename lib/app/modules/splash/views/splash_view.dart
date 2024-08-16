@@ -30,7 +30,7 @@ class SplashView extends StatelessWidget {
                       filterQuality: FilterQuality.high,
                     ),
                      Text(
-                      "TRANSFORMING INDIA's",
+                      "TRANSFORMING INDIA'S",
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,

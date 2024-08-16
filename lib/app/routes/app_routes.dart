@@ -15,6 +15,10 @@ class Routes {
   static const VENUE_DETAILS = _Paths.VENUE_DETAILS;
   static const ACADEMY_LISTING = _Paths.ACADEMY_LISTING;
   static const VENUE_LISTING = _Paths.VENUE_LISTING;
+  static const ORDERS_LISTING = _Paths.ORDERS_LISTING;
+  static const UPCOMING_BOOKINGS = _Paths.UPCOMING_BOOKINGS;
+  static const PAST_BOOKINGS = _Paths.PAST_BOOKINGS;
+  static const UPCOMING_DETAILS_SCREEN = _Paths.UPCOMING_DETAILS_SCREEN;
 }
 
 abstract class _Paths {
@@ -31,5 +35,8 @@ abstract class _Paths {
   static const VENUE_DETAILS = "/venue_details";
   static const ACADEMY_LISTING = "/academy_listing";
   static const VENUE_LISTING = "/venue_listing";
-  // static const SUBSCRIPTONS_ORDER_LISTING = "/subscriptions_order_listing"
+  static const ORDERS_LISTING = "/orders_listing";
+  static const UPCOMING_BOOKINGS = "/upcoming_bookings";
+  static const PAST_BOOKINGS = "/past_bookings";
+  static const UPCOMING_DETAILS_SCREEN = "/upcoming_details_screen";
 }

@@ -70,8 +70,8 @@ class FilterWidget extends StatelessWidget {
                               controller.selectStartDate(context);
                             },
                             child: Text(
-                              DateFormat("dd/MM/yyyy").format(
-                                  controller.pickedStartDate),
+                              DateFormat("dd/MM/yyyy")
+                                  .format(controller.pickedStartDate),
                               style: TextStyle(
                                   fontSize: 12, color: kGreySecondaryColor),
                             ),
@@ -89,8 +89,8 @@ class FilterWidget extends StatelessWidget {
                               controller.selectEndDate(context);
                             },
                             child: Text(
-                              DateFormat("dd/MM/yyyy").format(
-                                  controller.pickedEndDate),
+                              DateFormat("dd/MM/yyyy")
+                                  .format(controller.pickedEndDate),
                               style: TextStyle(
                                   fontSize: 12, color: kGreySecondaryColor),
                             ),
@@ -134,6 +134,7 @@ class FilterWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5.r)),
                           child: GestureDetector(
                             onTap: () {
+                              Get.back();
                               controller.filterorders();
                             },
                             child: Text(

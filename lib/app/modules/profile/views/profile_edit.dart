@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tidapartners/app/modules/profile/controllers/profile_controller.dart';
@@ -29,7 +30,7 @@ class EditProfileScreen extends StatelessWidget {
               ),
               leading: IconButton(
                 onPressed: () {
-                  Get.offAllNamed(AppPages.PROFILE);
+                  Get.offNamed(AppPages.PROFILE);
                 },
                 icon: const Icon(
                   CupertinoIcons.back,
@@ -39,7 +40,7 @@ class EditProfileScreen extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.all(16.0.dg),
+                padding: EdgeInsets.all(16.0.dg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -63,7 +64,8 @@ class EditProfileScreen extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.pop(context, "Select photo");
                                         print("--------");
-                                        controller.pickImage(ImageSource.gallery);
+                                        controller
+                                            .pickImage(ImageSource.gallery);
                                       },
                                     ),
                                     CupertinoActionSheetAction(
@@ -73,7 +75,8 @@ class EditProfileScreen extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.pop(context, "Take photo");
                                         print("--------");
-                                        controller.pickImage(ImageSource.camera);
+                                        controller
+                                            .pickImage(ImageSource.camera);
                                       },
                                     )
                                   ],
@@ -140,9 +143,14 @@ class EditProfileScreen extends StatelessWidget {
                     TextField(
                       controller: controller.phoneController,
                       decoration: InputDecoration(labelText: 'Phone'),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                      ],
                     ),
                     TextField(
                       controller: controller.emailController,
+                      readOnly: true,
                       decoration: InputDecoration(labelText: 'Email'),
                     ),
                     SizedBox(
@@ -152,11 +160,11 @@ class EditProfileScreen extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           controller.editProfileDetails();
-                          Get.back();
+                          // Get.back();
                         },
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 70, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 70, vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -177,8 +185,8 @@ class EditProfileScreen extends StatelessWidget {
                           Get.toNamed(AppPages.CHANGE_PASSWORD);
                         },
                         style: TextButton.styleFrom(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 70, vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 70, vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),

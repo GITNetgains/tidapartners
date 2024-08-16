@@ -9,6 +9,7 @@ import '../../../data/remote/api_service.dart';
 import '../../../routes/app_pages.dart';
 import '../../../../utils/common_utils.dart';
 import '../../sign_in/controllers/sign_in_controller.dart';
+import '../../sign_in/models/sign_in_model.dart';
 
 class SignUpController extends GetxController {
   late TextEditingController emailController;
@@ -101,54 +102,70 @@ class SignUpController extends GetxController {
         if (passwordController.text == confirmPasswordController.text) {
           Map res = await ApiService().createUserAccount({
             "email": emailController.text,
-            "username": emailController.text,
             "password": passwordController.text,
-            "first_name": nameController.text,
+            "name": nameController.text,
+            "phone": phoneController.text,
+            "role":"partner"
           });
-          if (res["code"] == 200) {
-            if (res["user_id"] != null) {
-              MySharedPref.setUserId(res["user_id"].toString());
-              MySharedPref.setName(nameController.text);
-              MySharedPref.setEmail(emailController.text);
-              Get.snackbar(
-                'Success',
-                '${res["message"]}',
-                backgroundColor: Colors.green,
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                borderRadius: 10.0,
-                margin: const EdgeInsets.all(10.0),
-                isDismissible: true,
-                duration: const Duration(seconds: 3),
-              );
-              await Get.offAllNamed(AppPages.HOME);
-              isLoading(false);
-              update();
-              return;
-            } else {
-              Get.snackbar(
-                'Error',
-                '${res["message"]}',
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM,
-                borderRadius: 10.0,
-                margin: const EdgeInsets.all(10.0),
-                isDismissible: true,
-                duration: const Duration(seconds: 3),
-              );
-              isLoading(false);
-              update();
-              return;
-            }
-          }
-        } else {
-          showSnackbar(
-            'Provide correct crentidals',
+          if (res["status"] == true) {
+        print(res);
+        LoginResponseModel loginResponseModel =
+            LoginResponseModel.fromJson(res["data"] as Map<String, dynamic>);
+        MySharedPref.setEmail(loginResponseModel.userEmail.toString());
+        MySharedPref.setName(loginResponseModel.userDisplayName.toString());
+        MySharedPref.setToken(loginResponseModel.token.toString());
+        MySharedPref.setUserId(loginResponseModel.id.toString());
+        MySharedPref.setAvatar(loginResponseModel.image.toString());
+        MySharedPref.setPhone(loginResponseModel.phone_number.toString());
+        print(MySharedPref.getUserId());
+        await Get.offAllNamed(AppPages.HOME);
+        isLoading(false);
+        update();
+      } else if (res["status"] == false) {
+        if (res["role"] != null) {
+          Get.snackbar(
+            'Error',
+            res["message"],
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            borderRadius: 10.0,
+            margin: const EdgeInsets.all(10.0),
+            isDismissible: true,
+            duration: const Duration(seconds: 3),
           );
           isLoading(false);
           update();
-          return;
+        } else {
+          Get.snackbar(
+            'Error',
+            "Please enter Correct Username and Password",
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            borderRadius: 10.0,
+            margin: const EdgeInsets.all(10.0),
+            isDismissible: true,
+            duration: const Duration(seconds: 3),
+          );
+          isLoading(false);
+          update();
+        }
+      } else {
+        Get.snackbar(
+          'Error',
+          "Please enter Correct Username and Password",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          borderRadius: 10.0,
+          margin: const EdgeInsets.all(10.0),
+          isDismissible: true,
+          duration: const Duration(seconds: 3),
+        );
+        isLoading(false);
+        update();
+      }
         }
       }
     } catch (e) {

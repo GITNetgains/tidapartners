@@ -114,6 +114,22 @@ class SideDrawer extends StatelessWidget {
             ),
             onTap: () => {Get.toNamed(AppPages.VENUE_LISTING)},
           ),
+           ListTile(
+            leading: const Icon(Icons.upcoming),
+            title: Text(
+              'Upcoming Bookings',
+              style: TextStyle(fontSize: 14.sp),
+            ),
+            onTap: () => {Get.toNamed(AppPages.UPCOMING_BOOKINGS)},
+          ),
+          ListTile(
+             leading: const Icon(Icons.done),
+            title: Text(
+              'Past Bookings',
+              style: TextStyle(fontSize: 14.sp),
+            ),
+            onTap: () => {Get.toNamed(AppPages.PAST_BOOKINGS)},
+          ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: Text(

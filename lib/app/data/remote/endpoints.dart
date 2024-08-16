@@ -1,7 +1,6 @@
 class Endpoints {
-  static const createPartner = "/partner/v1/register";
-  static const loginCustomer = "/jwt-auth/v1/token";
-
+  static const createPartner = "/tida/v1/signup";
+  static const loginCustomer = "/tida/v1/login";
   static const getUserId = "/tidasports/v1/getuseridbyemail";
   static const getUserDetails = "/wc/v3/customers";
   static const orders = "/tidasports/v1/getcustomerorders";
@@ -20,8 +19,9 @@ class Endpoints {
   static const ordernotes = "/notes";
   static const sendBookingNotification = "/partner_notification";
   static const codoption = "/tida/v1/get_available_payment";
-
-
-
-
+  static const getorderdetail = "/tidasports/v1/get_order_detail";
+  static const getProfileImage = "/tida/v1/get_profile_image";
+  static const upcomingBookings = "/tida/v1/get_upcoming_ordersbypartner";
+  static const upcomingSubscriptions = "/tida/v1/get_upcoming_subscriptionsbypartner";
+  static const updateOrderPayment = "/update_order_payment";
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tidapartners/app/data/local/my_shared_pref.dart';
+import 'package:tidapartners/app/routes/app_pages.dart';
 
 import '../../../../utils/colors.dart';
 import '../views/profile_edit.dart';
@@ -51,7 +52,7 @@ class ProfileBar extends StatelessWidget {
                       CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          Get.back();
+                          Get.offNamed(AppPages.HOME);
                         },
                         child: Icon(
                           CupertinoIcons.back,
@@ -71,29 +72,30 @@ class ProfileBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: 16.0.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CircleAvatar(
                         radius: 35.0.dg,
-                        backgroundImage: NetworkImage(MySharedPref.getAvatar() ?? ""),
+                        backgroundImage:
+                            NetworkImage(MySharedPref.getAvatar() ?? ""),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name.capitalize.toString(),
+                            MySharedPref.getName().capitalize.toString(),
                             style: TextStyle(
                               color: kWhiteColor,
-                              fontSize: 16.0,
+                              fontSize: 16.0.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            job,
+                            MySharedPref.getEmail(),
                             style: TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 14.0.sp,
                               color: kWhiteColor,
                             ),
                           ),
@@ -101,7 +103,7 @@ class ProfileBar extends StatelessWidget {
                               ? Text(
                                   'Phone Number: ${location.capitalize.toString()}',
                                   style: TextStyle(
-                                      fontSize: 12.0, color: kWhiteColor),
+                                      fontSize: 12.0.sp, color: kWhiteColor),
                                 )
                               : Container(),
                         ],

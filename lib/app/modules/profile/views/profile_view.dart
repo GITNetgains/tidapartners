@@ -97,7 +97,7 @@ class ProfileView extends StatelessWidget {
                                                       ?.data?[index]
                                                       .address ??
                                                   "Shivjot Enclave",
-                                              noOfBookings: 0));
+                                              noOfBookings: 0, customerName: ""));
                                     })
                                 : Center(child: Text("No Academies")),
                           ),
@@ -169,7 +169,7 @@ class ProfileView extends StatelessWidget {
                                                           ?.data?[index]
                                                           .address ??
                                                       "Shivjot Enclave",
-                                                  noOfBookings: 0));
+                                                  noOfBookings: 0, customerName: ""));
                                         }),
                           ),
                           Padding(

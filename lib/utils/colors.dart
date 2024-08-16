@@ -5,6 +5,7 @@ import 'dart:ui';
 const kdarkblue = Color(0xff003DA6);
 const kPrimaryColor = Color(0xffff0000);
 const kSecondaryColor = Color(0xffff0000);
+const kSettleColor = Color.fromARGB(255, 255, 28, 28);
 const kLightBlue = Color(0xffecF8F8);
 const kGreyColor = Color.fromARGB(255, 209, 209, 209);
 const kWhiteColor = Color(0xfff9F9F9);

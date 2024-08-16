@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:tidapartners/app/routes/app_pages.dart';
 import '../../../../utils/colors.dart';
 import '../../../data/local/my_shared_pref.dart';
 import '../../../data/models/customer_model.dart';
@@ -54,8 +55,8 @@ class ProfileController extends GetxController {
   }
 
   Future<bool> checkcod() async {
-    dynamic res =
-        await ApiService().availablecodoption({"partnerid": MySharedPref.getUserId()});
+    dynamic res = await ApiService()
+        .availablecodoption({"partnerid": MySharedPref.getUserId()});
     res = jsonDecode(res.body);
     print(res["enable_cod"]);
     if (res["enable_cod"] == "1") {
@@ -110,9 +111,10 @@ class ProfileController extends GetxController {
   }
 
   Future<void> addPropicApi2() async {
-    // var headers = {
-    //   'Content-Type': 'multipart/form-data;',
-    // };
+   Map<String,String> headers = {
+    'Content-Type': 'multipart/form-data;',
+    'authorization': ApiInterface.auth ?? "",
+  };
     var request = http.MultipartRequest(
         'POST', Uri.parse(ApiInterface.baseUrl + Endpoints.updateProfileImg));
     request.fields.addAll({
@@ -122,7 +124,7 @@ class ProfileController extends GetxController {
       request.files.add(
           await http.MultipartFile.fromPath('async-upload', croppedFile!.path));
     }
-    // request.headers.addAll(headers);
+    request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     print(response.statusCode);
 
@@ -139,6 +141,27 @@ class ProfileController extends GetxController {
     try {
       isLoading = true;
       update();
+      if (emailController.text.isEmpty ||
+          phoneController.text.isEmpty ||
+          nameController.text.isEmpty) {
+        isLoading = false;
+        update();
+        Get.snackbar("Error", "Kindly Enter Missing details.",
+            backgroundColor: Colors.red,
+            colorText: kWhiteColor,
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+      if (phoneController.text.length != 10) {
+        isLoading = false;
+        update();
+        Get.snackbar("Error", "Kindly Enter Valid Phone Number",
+            backgroundColor: Colors.red,
+            colorText: kWhiteColor,
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+
       Map<String, dynamic> data = {
         "email": emailController.text,
         "first_name": nameController.text,
@@ -173,6 +196,7 @@ class ProfileController extends GetxController {
           MySharedPref.setPhone(customerModel.billing!.phone.toString());
           isLoading = false;
           update();
+          Get.offNamed(AppPages.HOME);
           Get.snackbar("Successfull", "Profile updated successfully",
               backgroundColor: kSuccessColor,
               colorText: kWhiteColor,
@@ -180,7 +204,7 @@ class ProfileController extends GetxController {
         } else {
           isLoading = false;
           update();
-          Get.snackbar("Error", "Couldn't Update your Profile Details",
+          Get.snackbar("Error", "Kindly Enter Missing details.",
               backgroundColor: Colors.red,
               colorText: kWhiteColor,
               snackPosition: SnackPosition.BOTTOM);
@@ -188,10 +212,10 @@ class ProfileController extends GetxController {
       } else {
         isLoading = false;
         update();
-        // Get.snackbar("Error", "Couldn't Update your Profile Details",
-        //     backgroundColor: Colors.red,
-        //     colorText: kWhiteColor,
-        //     snackPosition: SnackPosition.BOTTOM) ;
+        Get.snackbar("Error", "Kindly Enter Missing details.",
+            backgroundColor: Colors.red,
+            colorText: kWhiteColor,
+            snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
       isLoading = false;
@@ -210,6 +234,7 @@ class ProfileController extends GetxController {
     update();
     light0 = await checkcod();
     await Future.wait([getAcademies(), getVenues()]);
+    userImage = MySharedPref.getAvatar();
     isLoading = false;
     update();
     super.onInit();

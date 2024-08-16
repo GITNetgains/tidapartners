@@ -86,8 +86,8 @@ class SimpleTable extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i].enumName}.png",
+                  Image.network(
+                    amenitiesList[i].image ?? "",
                     height: 15.h,
                     width: 15.w,
                     errorBuilder: (context, error, stackTrace) {
@@ -115,8 +115,8 @@ class SimpleTable extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i + 1].enumName}.png",
+                  Image.network(
+                     amenitiesList[i+1].image ?? "",
                     height: 15.h,
                     width: 15.w,
                     errorBuilder: (context, error, stackTrace) {
@@ -176,8 +176,8 @@ class SimpleTable extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Image.asset(
-                    "assets/aminities/${amenitiesList[i].enumName}.png",
+                  Image.network(
+                    amenitiesList[i].image ?? "",
                     height: 15.h,
                     width: 15.w,
                     errorBuilder: (context, error, stackTrace) {

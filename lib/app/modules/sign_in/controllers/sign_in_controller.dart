@@ -55,54 +55,97 @@ class SignInController extends GetxController {
     isLoading(true);
     update();
     FocusManager.instance.primaryFocus?.unfocus();
+    if (emailController.text.trim().isEmpty || passwordController.text.trim().isEmpty) {
+      Get.snackbar(
+        'Error',
+        "Kindly Enter Missing Details",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        borderRadius: 10.0,
+        margin: const EdgeInsets.all(10.0),
+        isDismissible: true,
+        duration: const Duration(seconds: 3),
+      );
+      isLoading(false);
+      update();
+      return;
+    }
+    if(!emailController.text.trim().isEmail){
+       Get.snackbar(
+        'Error',
+        "Enter valid email address",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        borderRadius: 10.0,
+        margin: const EdgeInsets.all(10.0),
+        isDismissible: true,
+        duration: const Duration(seconds: 3),
+      );
+      isLoading(false);
+      update();
+      return;
+    }
     try {
-      Map<String, dynamic> data = {"username": username, "password": password};
+      Map<String, dynamic> data = {
+        "user_login": username,
+        "user_password": password,
+        "role": "partner"
+      };
       print(data);
       Map res = await ApiService().loginUser(data);
       print(res);
-      if (res["token"] != null) {
+      if (res["status"] == true) {
+        print(res);
         LoginResponseModel loginResponseModel =
-            LoginResponseModel.fromJson(res as Map<String, dynamic>);
+            LoginResponseModel.fromJson(res["data"] as Map<String, dynamic>);
         MySharedPref.setEmail(loginResponseModel.userEmail.toString());
         MySharedPref.setName(loginResponseModel.userDisplayName.toString());
         MySharedPref.setToken(loginResponseModel.token.toString());
-        String userId = await ApiService()
-            .getUserIdByEmail({"email": MySharedPref.getEmail()});
-        print("----------------------------------------");
-        var user = jsonDecode(userId);
-        print('${user['data']}------');
-        MySharedPref.setUserId(userId);
-        Map<String, dynamic> userdetailsresponse =
-            await ApiService().getUserDetails(user['data'].toString());
-        print('${userdetailsresponse}---------hello world');
-        GetCustomerModel getcustomerModel =
-            await GetCustomerModel.fromJson(userdetailsresponse);
-        MySharedPref.setUserId(getcustomerModel.id.toString());
-        MySharedPref.setEmail(getcustomerModel.email.toString());
-        MySharedPref.setName(getcustomerModel.firstName.toString());
-        MySharedPref.setPhone(getcustomerModel.shipping!.phone.toString());
-        MySharedPref.setAvatar(getcustomerModel.avatarUrl.toString());
-        Get.snackbar(
-          'Message',
-          "Login Successful",
-          backgroundColor: kSuccessColor,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          borderRadius: 10.0,
-          margin: const EdgeInsets.all(10.0),
-          isDismissible: true,
-          duration: const Duration(seconds: 3),
-        );
+        MySharedPref.setUserId(loginResponseModel.id.toString());
+        MySharedPref.setAvatar(loginResponseModel.image.toString());
+        MySharedPref.setPhone(loginResponseModel.phone_number.toString());
+        print(MySharedPref.getUserId());
         await Get.offAllNamed(AppPages.HOME);
         isLoading(false);
         update();
+      } else if (res["status"] == false) {
+        if (res["role"] != null) {
+          Get.snackbar(
+            'Error',
+            res["message"],
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            borderRadius: 10.0,
+            margin: const EdgeInsets.all(10.0),
+            isDismissible: true,
+            duration: const Duration(seconds: 3),
+          );
+          isLoading(false);
+          update();
+        } else {
+          Get.snackbar(
+            'Error',
+            "Please enter Correct Username and Password",
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            borderRadius: 10.0,
+            margin: const EdgeInsets.all(10.0),
+            isDismissible: true,
+            duration: const Duration(seconds: 3),
+          );
+          isLoading(false);
+          update();
+        }
       } else {
-        print(res["message"]);
         Get.snackbar(
           'Error',
-          res["code"],
+          "Please enter Correct Username and Password",
           backgroundColor: Colors.red,
-          colorText: Colors.black,
+          colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
           borderRadius: 10.0,
           margin: const EdgeInsets.all(10.0),

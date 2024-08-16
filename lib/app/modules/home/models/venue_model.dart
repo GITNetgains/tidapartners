@@ -42,6 +42,7 @@ class Data {
   String? currency;
   CreatedDate? createdDate;
   String? transactionId;
+  String? transactionType;
   String? discountPrice;
   int? total;
   String? totalDiscountedAmount;
@@ -55,6 +56,7 @@ class Data {
       this.currency,
       this.createdDate,
       this.transactionId,
+      this.transactionType,
       this.discountPrice,
       this.total,
       this.totalDiscountedAmount,
@@ -79,6 +81,9 @@ class Data {
     }
     if (json["transaction_id"] is String) {
       transactionId = json["transaction_id"];
+    }
+    if (json["transaction_type"] is String) {
+      transactionType = json["transaction_type"];
     }
     if (json["discount_price"] is String) {
       discountPrice = json["discount_price"];

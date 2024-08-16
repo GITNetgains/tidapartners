@@ -36,8 +36,14 @@ class DetailsWidget extends StatelessWidget {
                 ),
                 Text(
                   data.location.length > 40
-                      ? "${data.location.substring(0, 37).capitalizeFirst}..."
+                      ? "${data.location.substring(0, 37).capitalize}..."
                       : data.location,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                  ),
+                ),
+                Text(
+                  "Customer Name:- ${data.customerName.length > 20 ? "${data.customerName.substring(0, 17)}..." : data.customerName}",
                   style: TextStyle(
                     fontSize: 12.sp,
                   ),

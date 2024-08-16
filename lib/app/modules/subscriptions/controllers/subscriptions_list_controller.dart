@@ -41,7 +41,7 @@ class SubscriptionListController extends GetxController {
                   "https://tidasports.com/wp-content/uploads/2024/03/20231221132816-2023-12-21tbl_academy132811.png",
               name: element.items?[0].academyName ?? "N/A",
               location: element.items?[0].academyAddress ?? "N/A",
-              noOfBookings: element.items?.length ?? 1));
+              noOfBookings: element.items?.length ?? 1, customerName: element.items?[0].personName ?? "N/A"));
         });
       }
     }

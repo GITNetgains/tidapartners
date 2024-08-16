@@ -37,6 +37,7 @@ class ApiService extends ApiInterface {
             <String, String>{
               'accept': 'application/json',
               'content-type': 'application/json',
+              'authorization': ApiInterface.auth!
             });
     return response;
   }
@@ -107,6 +108,7 @@ class ApiService extends ApiInterface {
         headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
+          'authorization': ApiInterface.auth!
         });
     return _parseBaseResponse(res) ?? {};
   }
@@ -167,7 +169,7 @@ class ApiService extends ApiInterface {
         headers: {
           'accept': 'application/json',
           'content-type': 'application/json',
-          // 'authorization': ApiInterface.auth!
+          'authorization': ApiInterface.auth!
         });
     return res;
   }
@@ -236,9 +238,39 @@ class ApiService extends ApiInterface {
     return res;
   }
 
+  Future<http.Response> getorderdetail(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.getorderdetail, data: data);
+    return res;
+  }
+
   Future<http.Response> availablecodoption(Map<String, dynamic> data) async {
     http.Response res = await postApi(
         url: ApiInterface.baseUrl + Endpoints.codoption, data: data);
+    return res;
+  }
+
+  Future<http.Response> getProfileImage(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.getProfileImage, data: data);
+    return res;
+  }
+
+  Future<http.Response> getUpcomingBookings(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.upcomingBookings, data: data);
+    return res;
+  }
+
+  Future<http.Response> getUpcomingSubscripitions(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.baseUrl + Endpoints.upcomingSubscriptions, data: data);
+    return res;
+  }
+
+   Future<http.Response> updateOrderStatus(Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+        url: ApiInterface.notificationServiceUrl  + Endpoints.updateOrderPayment, data: data);
     return res;
   }
 
@@ -293,6 +325,7 @@ class ApiService extends ApiInterface {
             Endpoints.sendBookingNotification),
         headers: <String, String>{
           'Content-Type': 'application/json',
+          'authorization': ApiInterface.auth!
         },
         body: jsonEncode(body),
       );

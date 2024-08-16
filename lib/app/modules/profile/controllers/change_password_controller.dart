@@ -1,5 +1,4 @@
-
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import '../../../components/snackBar.dart';
 import '../../../data/local/my_shared_pref.dart';
 import '../../../data/remote/api_service.dart';
 
-
 class ChangePasswordController extends GetxController {
   TextEditingController newpassword = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
@@ -18,11 +16,25 @@ class ChangePasswordController extends GetxController {
   RxBool isConfirmPasswordView = true.obs;
   String userid = MySharedPref.getUserId().toString();
   bool isLoading = false;
-  void showSnackbar(msg) {
-    Get.snackbar("Please provide $msg", "$msg is required.",
+  Timer? _debounce;
+  Future<void> showSnackbar(msg) async {
+    await Get.snackbar("Please provide $msg", "$msg is required.",
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM);
+  }
+
+  void onButtonPressed() {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () async{
+      await changepass();
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   void changepasswordview() {
@@ -41,8 +53,8 @@ class ChangePasswordController extends GetxController {
     try {
       FocusManager.instance.primaryFocus?.unfocus();
       if (newpassword.text.trim().isEmpty) {
-        showSnackbar("New Password");
-        isLoading = true;
+        await showSnackbar("New Password");
+        isLoading = false;
         update();
         return;
       } else if (isPasswordCompliant(newpassword.text.trim().toString()) ==
@@ -74,7 +86,7 @@ class ChangePasswordController extends GetxController {
           print(MySharedPref.getUserId());
           dynamic res = await ApiService()
               .changePassword(newpassword.text.trim(), userid);
-              print((res.body).toString());
+          print((res.body).toString());
           if (res.statusCode == 200) {
             showSuccessfulSnackbar(jsonDecode(res.body));
           } else {

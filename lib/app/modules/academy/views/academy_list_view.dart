@@ -62,7 +62,8 @@ class AcademyListView extends StatelessWidget {
                                 location: controller.academyDataModel.data
                                         ?.data?[index].address ??
                                     "Shivjot Enclave",
-                                noOfBookings: 0)),
+                                noOfBookings: 0, customerName: controller.academyDataModel.data
+                                        ?.data?[index].headCoach ?? "No Data")),
                       );
                     },
                     itemCount: controller.academyDataModel.data?.data?.length,

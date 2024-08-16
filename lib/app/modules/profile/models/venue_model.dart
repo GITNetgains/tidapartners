@@ -211,24 +211,29 @@ class Slots {
 }
 
 class Amenities {
-    String? enumName;
-    String? displayName;
+  String? enumName;
+  String? displayName;
+  String? image;
 
-    Amenities({this.enumName, this.displayName});
+  Amenities({this.enumName, this.displayName, this.image});
 
-    Amenities.fromJson(Map<String, dynamic> json) {
-        if(json["enum_name"] is String) {
-            enumName = json["enum_name"];
-        }
-        if(json["display_name"] is String) {
-            displayName = json["display_name"];
-        }
+  Amenities.fromJson(Map<String, dynamic> json) {
+    if (json["enum_name"] is String) {
+      enumName = json["enum_name"];
     }
-
-    Map<String, dynamic> toJson() {
-        final Map<String, dynamic> _data = <String, dynamic>{};
-        _data["enum_name"] = enumName;
-        _data["display_name"] = displayName;
-        return _data;
+    if (json["display_name"] is String) {
+      displayName = json["display_name"];
     }
+    if (json["image"] is String) {
+      image = json["image"];
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["enum_name"] = enumName;
+    _data["display_name"] = displayName;
+    _data["image"] = image;
+    return _data;
+  }
 }

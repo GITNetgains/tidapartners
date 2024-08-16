@@ -2,12 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:tidapartners/app/data/remote/api_service.dart';
+import 'package:tidapartners/app/modules/home/models/subscription_model.dart'
+    as subscription;
 import 'app/data/models/Push_notification_model.dart';
 import 'app/data/local/my_shared_pref.dart';
+import 'app/modules/profile/models/academy_model.dart' as academyBookings;
+import 'app/modules/profile/models/venue_model.dart' as venueBookings;
 import 'app/routes/app_pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -95,19 +100,24 @@ Future<void> main() async {
     }
   });
   await MySharedPref.init();
-  runApp(ScreenUtilInit(
-    designSize: const Size(375, 812),
-    minTextAdapt: true,
-    splitScreenMode: true,
-    useInheritedMediaQuery: true,
-    builder: (context, widget) {
-      return GetMaterialApp(
-        initialRoute: AppPages.INITIAL,
-        getPages: AppPages.routes,
-        debugShowCheckedModeBanner: false,
-      );
-    },
-  ));
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      useInheritedMediaQuery: true,
+      builder: (context, widget) {
+        return GetMaterialApp(
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    ));
+  });
 }
 
 void requestAndRegisterNotification() async {
@@ -176,18 +186,91 @@ void onDidReceiveNotificationResponse(
     debugPrint('notification payload: $payload');
     Map<String, dynamic> data = json.decode(payload ?? "");
     print(data["order_id"]);
-    // Get.toNamed(
-    //   AppPages.ORDERS,
-    // );
-    // OrdersController _c = Get.put(OrdersController());
-    // _c.selectedBookingId(data["order_id"]);
-    // Get.to(() => OrderDetails());
+    if (data["order_type"] == "subscription_variation") {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      subscription.Data subscriptionDataModel = subscription.Data();
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            subscriptionDataModel =
+                await subscription.Data.fromJson(res["message"]["data"]);
+            subscriptionDataModel.id = int.parse(data["order_id"]);
+            print(subscriptionDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+              "data": subscriptionDataModel,
+              "detailname": "subscription",
+            });
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    } else if (data["order_type"] == "variation") {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      academyBookings.Data academyDataModel = academyBookings.Data();
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            academyDataModel =
+                await academyBookings.Data.fromJson(res["message"]["data"]);
+            //  academyDataModel.id = int.parse(data["order_id"]);
+            print(academyDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+              "data": academyDataModel,
+              "orderid": data["order_id"],
+              "detailname": "booking",
+            });
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    } else {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      venueBookings.Data venueDataModel = venueBookings.Data();
+
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            venueDataModel =
+                await venueBookings.Data.fromJson(res["message"]["data"]);
+            //  academyDataModel.id = int.parse(data["order_id"]);
+            print(venueDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+              "data": venueDataModel,
+              "orderid": data["order_id"],
+              "detailname": "slots",
+            });
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    }
   }
 }
 
 @pragma('vm:entry-point')
 void onDidReceiveBackgroundNotificationResponse(
-    NotificationResponse notificationResponse) {
+    NotificationResponse notificationResponse) async {
   debugPrint("ondidrecievebackgroundnotificationresponse  ");
   print('notification(${notificationResponse.id}) action tapped: '
       '${notificationResponse.actionId} with'
@@ -198,12 +281,81 @@ void onDidReceiveBackgroundNotificationResponse(
     debugPrint('notification payload: $payload');
     Map<String, dynamic> data = json.decode(payload ?? "");
     print(data["order_id"]);
-    // Get.toNamed(
-    //   AppPages.ORDERS,
-    // );
-    // OrdersController _c = Get.put(OrdersController());
-    // _c.selectedBookingId(data["order_id"]);
-    // Get.to(() => OrderDetails());
+    if (data["order_type"] == "subscription_variation") {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      subscription.Data subscriptionDataModel = subscription.Data();
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            subscriptionDataModel =
+                await subscription.Data.fromJson(res["message"]["data"]);
+            subscriptionDataModel.id = int.parse(data["order_id"]);
+            print(subscriptionDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN,
+                arguments: {"data": subscriptionDataModel});
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    } else if (data["order_type"] == "variation") {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      academyBookings.Data academyDataModel = academyBookings.Data();
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            academyDataModel =
+                await academyBookings.Data.fromJson(res["message"]["data"]);
+            //  academyDataModel.id = int.parse(data["order_id"]);
+            print(academyDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+              "data": academyDataModel,
+              "orderid": data["order_id"]
+            });
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    } else {
+      dynamic res =
+          await ApiService().getorderdetail({"order_id": data["order_id"]});
+      venueBookings.Data venueDataModel = venueBookings.Data();
+
+      if (res.statusCode == 200) {
+        res = await jsonDecode(res.body);
+        if (res["message"] != null) {
+          if (res["message"]["data"] != null) {
+            venueDataModel =
+                await venueBookings.Data.fromJson(res["message"]["data"]);
+            //  academyDataModel.id = int.parse(data["order_id"]);
+            print(venueDataModel);
+            Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+              "data": venueDataModel,
+              "orderid": data["order_id"]
+            });
+          } else {
+            Get.toNamed(AppPages.PROFILE);
+          }
+        } else {
+          Get.toNamed(AppPages.PROFILE);
+        }
+      } else {
+        Get.toNamed(AppPages.PROFILE);
+      }
+    }
   }
 }
 

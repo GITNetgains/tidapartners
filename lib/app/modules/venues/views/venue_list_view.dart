@@ -30,42 +30,49 @@ class VenueListView extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
-              shape: const RoundedRectangleBorder(
+              shape:  RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20.r),
+                  bottomRight: Radius.circular(20.r),
                 ),
               ),
             ),
-            body: controller.isLoading.value ? ShowLoader() : controller.venueModel.data != null ? ListView.builder(
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    if (controller.venueModel.data != null) {
-                      Get.toNamed(AppPages.VENUE_DETAILS, arguments: {
-                        "data": controller.venueModel.data?.data?[index]
-                      });
-                    } else {
-                      print("------------");
-                    }
-                  },
-                  child: ProductCard(
-                      data: DetailsModel(
-                          imagePath: controller
-                                  .venueModel.data?.data?[index].image ??
-                              "https://tidasports.com/wp-content/uploads/2024/03/0314image_cropper_1690367587525.jpg",
-                          name:
-                              controller.venueModel.data?.data?[index].title ??
-                                  "Igniation Football",
-                          location: controller
-                                  .venueModel.data?.data?[index].address ??
-                              "Shivjot Enclave",
-                          noOfBookings: 0)),
-                );
-              },
-              itemCount: controller.venueModel.data?.data?.length,
-            ) : Center(child: Text("No Venues")),
-
+            body: controller.isLoading.value
+                ? ShowLoader()
+                : controller.venueModel.data != null
+                    ? ListView.builder(
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (controller.venueModel.data != null) {
+                                Get.toNamed(AppPages.VENUE_DETAILS, arguments: {
+                                  "data":
+                                      controller.venueModel.data?.data?[index]
+                                });
+                              } else {
+                                print("------------");
+                              }
+                            },
+                            child: ProductCard(
+                                data: DetailsModel(
+                                    imagePath: controller.venueModel.data
+                                            ?.data?[index].image ??
+                                        "https://tidasports.com/wp-content/uploads/2024/03/0314image_cropper_1690367587525.jpg",
+                                    name: controller.venueModel.data
+                                            ?.data?[index].title ??
+                                        "Igniation Football",
+                                    location: controller.venueModel.data
+                                            ?.data?[index].address ??
+                                        "Shivjot Enclave",
+                                    noOfBookings: 0,
+                                    customerName: controller.venueModel.data
+                                            ?.data?[index].assistantCoachName ??
+                                        "Shivjot Enclave")),
+                          );
+                        },
+                        itemCount: controller.venueModel.data?.data?.length,
+                      )
+                    : Center(child: Text("No Venues")),
             bottomNavigationBar: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,8 +82,7 @@ class VenueListView extends StatelessWidget {
                         padding: EdgeInsets.all(16.0.h),
                         child: GestureDetector(
                           onTap: () {
-                            controller
-                                .getVenues((--controller.pageingnumb));
+                            controller.getVenues((--controller.pageingnumb));
                           },
                           child: Text(
                             "Previous Page",
@@ -92,8 +98,7 @@ class VenueListView extends StatelessWidget {
                         padding: EdgeInsets.all(16.0.h),
                         child: GestureDetector(
                           onTap: () {
-                            controller
-                                .getVenues((++controller.pageingnumb));
+                            controller.getVenues((++controller.pageingnumb));
                           },
                           child: Text(
                             "Next Page",

@@ -48,7 +48,7 @@ class SignInScreen extends StatelessWidget {
                            SizedBox(height: 20.h),
                           MyTextField(
                             textController: controller.emailController,
-                            firstImage: AppImages.kuser,
+                            firstImage: AppImages.kemail,
                             firstText: 'Email',
                             hintText: 'Enter your Email',
                             keyboardType: TextInputType.emailAddress,

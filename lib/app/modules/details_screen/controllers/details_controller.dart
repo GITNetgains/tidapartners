@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:tidapartners/app/data/local/my_shared_pref.dart';
 import 'package:tidapartners/app/modules/home/models/subscription_model.dart'
     as subscription;
@@ -21,6 +23,7 @@ class DetailsController extends GetxController {
   TextEditingController personnamectrl = TextEditingController();
   String orderid = "";
   RxBool isLoading = false.obs;
+  String CustomerpartnerId = "";
 
   @override
   void onInit() async {
@@ -30,16 +33,19 @@ class DetailsController extends GetxController {
       bookingOrdersModel = Get.arguments["data"];
       bookingDetails();
       orderid = bookingOrdersModel.id.toString();
+      CustomerpartnerId = bookingOrdersModel.customer!.id.toString();
       update();
     } else if (detailname.value == "subscription") {
       subscriptionOrdersModel = Get.arguments["data"];
       subscriptionDetails();
       orderid = subscriptionOrdersModel.id.toString();
+      CustomerpartnerId = subscriptionOrdersModel.customer!.id.toString();
       update();
     } else {
       venueOrdersModel = Get.arguments["data"];
       venueDetails();
       orderid = venueOrdersModel.id.toString();
+      CustomerpartnerId = subscriptionOrdersModel.customer!.id.toString();
       update();
     }
     super.onInit();
@@ -109,25 +115,32 @@ class DetailsController extends GetxController {
     isLoading(true);
     update();
     Get.back();
-    Map<String, dynamic> ordernotesdata = {"note": personnamectrl.text};
-    Map resi = await ApiService().createOrdernotes(ordernotesdata, orderid);
-    Map result = await ApiService().updateOrder({"status": status}, orderid);
+    Map<String, dynamic> data = {
+      "order_id": orderid,
+      "status": status,
+      "note": personnamectrl.text,
+      "userid": CustomerpartnerId,
+      "fcmToken": await FirebaseMessaging.instance.getToken(),
+      "customerUserId": MySharedPref.getUserId(),
+    };
+    dynamic result = await ApiService().updateOrderStatus(data);
     print(result);
     if (detailname.value == "booking") {
       bookingOrdersModel.status = status;
-      await resonseapi(orderid, bookingOrdersModel.customer!.id.toString());
+      // await resonseapi(orderid, bookingOrdersModel.customer!.id.toString());
       update();
     } else if (detailname.value == "subscription") {
       subscriptionOrdersModel.status = status;
-      await resonseapi(
-          orderid, subscriptionOrdersModel.customer!.id.toString());
+      // await resonseapi(
+      // orderid, subscriptionOrdersModel.customer!.id.toString());
       update();
     } else {
       venueOrdersModel.status = status;
-      await resonseapi(orderid, venueOrdersModel.customer!.id.toString());
+      // await resonseapi(orderid, venueOrdersModel.customer!.id.toString());
       update();
     }
     Get.back();
+    Get.offAllNamed(AppPages.HOME);
     isLoading(false);
     Get.snackbar(
       'Success',
@@ -153,18 +166,19 @@ class DetailsController extends GetxController {
         bookingOrdersModel.customer?.phone ?? "+91 9353478558"));
     for (booking.Items item in bookingOrdersModel.items ?? []) {
       rows2.add([
-        buildTableRow(
-            "Transaction ID",
-            bookingOrdersModel.transactionId!.isNotEmpty
-                ? bookingOrdersModel.transactionId ?? "Cash"
-                : "Cash"),
+        if (bookingOrdersModel.transactionId!.isNotEmpty)
+          buildTableRow(
+              "Transaction ID",
+              bookingOrdersModel.transactionId!.isNotEmpty
+                  ? bookingOrdersModel.transactionId ?? "Cash"
+                  : "Cash"),
         buildTableRow(
             "Transaction Type",
-            bookingOrdersModel.transactionId != null
-                ? bookingOrdersModel.transactionId!.isNotEmpty
-                    ? "Online"
-                    : "Offline"
-                : "Offline"),
+            bookingOrdersModel.transactionType != null
+                ? bookingOrdersModel.transactionType!.isNotEmpty
+                    ? bookingOrdersModel.transactionType.toString()
+                    : "No Data"
+                : "No Data"),
         if (bookingOrdersModel.total != null)
           buildTableRow("Total Amount", "₹ ${bookingOrdersModel.total ?? 499}"),
         if (bookingOrdersModel.totalDiscountedAmount != null)
@@ -192,18 +206,19 @@ class DetailsController extends GetxController {
 
     for (subscription.Items item in subscriptionOrdersModel.items ?? []) {
       rows2.add([
-        buildTableRow(
-            "Transaction ID",
-            subscriptionOrdersModel.transactionId!.isNotEmpty
-                ? subscriptionOrdersModel.transactionId ?? "Cash"
-                : "Cash"),
+        if (subscriptionOrdersModel.transactionId!.isNotEmpty)
+          buildTableRow(
+              "Transaction ID",
+              subscriptionOrdersModel.transactionId!.isNotEmpty
+                  ? subscriptionOrdersModel.transactionId ?? "No Data"
+                  : "No Data"),
         buildTableRow(
             "Transaction Type",
-            subscriptionOrdersModel.transactionId != null
-                ? subscriptionOrdersModel.transactionId!.isNotEmpty
-                    ? "Online"
-                    : "Offline"
-                : "Offline"),
+            subscriptionOrdersModel.transactionType != null
+                ? subscriptionOrdersModel.transactionType!.isNotEmpty
+                    ? subscriptionOrdersModel.transactionType.toString()
+                    : "No Data"
+                : "No Data"),
         if (subscriptionOrdersModel.total != null)
           buildTableRow(
               "Total Amount", "₹ ${subscriptionOrdersModel.total ?? 499}"),
@@ -239,7 +254,7 @@ class DetailsController extends GetxController {
         "Phone Number", venueOrdersModel.customer?.phone ?? "No Data"));
     rows1.add(buildTableRow(
         "Transaction Type",
-        venueOrdersModel.transactionId != null
+        venueOrdersModel.transactionType != null
             ? venueOrdersModel.transactionId!.isNotEmpty
                 ? "Online"
                 : "Online"
@@ -247,14 +262,15 @@ class DetailsController extends GetxController {
     // if (venueOrdersModel.transactionId != null
     //     ? venueOrdersModel.transactionId!.isEmpty
     //     : false) {
-    rows1.add(buildTableRow(
-        "Transaction ID",
-        venueOrdersModel.transactionId != ""
-            ? venueOrdersModel.transactionId ?? "No Data"
-            : "No Data"));
+    if (venueOrdersModel.transactionId!.isNotEmpty)
+      rows1.add(buildTableRow(
+          "Transaction ID",
+          venueOrdersModel.transactionId != ""
+              ? venueOrdersModel.transactionId ?? "No Data"
+              : "No Data"));
     if (venueOrdersModel.total != null)
-      rows1.add(buildTableRow("Total Amount",
-          "₹ ${venueOrdersModel.total.toString()}"));
+      rows1.add(buildTableRow(
+          "Total Amount", "₹ ${venueOrdersModel.total.toString()}"));
     if (venueOrdersModel.totalDiscountedAmount != null)
       rows1.add(buildTableRow("Bill Amount",
           "₹ ${venueOrdersModel.totalDiscountedAmount.toString()}"));
@@ -313,6 +329,7 @@ class DetailsController extends GetxController {
   Future resonseapi(String orderId, String customerId) async {
     try {
       await ApiService.sendBookingNotification(customerId, orderid);
+      
     } catch (e) {
       print(e);
     }

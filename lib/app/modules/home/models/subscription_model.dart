@@ -40,6 +40,7 @@ class Data {
     String? currency;
     CreatedDate? createdDate;
     String? transactionId;
+    String? transactionType;
     String? discountPrice;
     int? total;
     String? totalDiscountedAmount;
@@ -49,7 +50,7 @@ class Data {
     List<Subscriptions>? subscriptions;
     List<Items>? items;
 
-    Data({this.id, this.status, this.currency, this.createdDate, this.transactionId, this.discountPrice, this.total, this.totalDiscountedAmount, this.coupon, this.subscriptionsIds, this.customer, this.subscriptions, this.items});
+    Data({this.id, this.status, this.currency, this.createdDate, this.transactionId, this.transactionType, this.discountPrice, this.total, this.totalDiscountedAmount, this.coupon, this.subscriptionsIds, this.customer, this.subscriptions, this.items});
 
     Data.fromJson(Map<String, dynamic> json) {
         if(json["id"] is int) {
@@ -66,6 +67,9 @@ class Data {
         }
         if(json["transaction_id"] is String) {
             transactionId = json["transaction_id"];
+        }
+        if(json["transaction_type"] is String) {
+            transactionType = json["transaction_type"];
         }
         if(json["discount_price"] is String) {
             discountPrice = json["discount_price"];
@@ -102,6 +106,7 @@ class Data {
             _data["created_date"] = createdDate?.toJson();
         }
         _data["transaction_id"] = transactionId;
+        _data["transaction_type"] = transactionType;
         _data["discount_price"] = discountPrice;
         _data["total"] = total;
         _data["total_discounted_amount"] = totalDiscountedAmount;
