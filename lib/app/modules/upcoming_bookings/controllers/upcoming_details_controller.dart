@@ -150,7 +150,7 @@ class UpcomingDetailsController extends GetxController {
     rows1.add(buildTableRow(
         "Booking Status", bookingOrdersModel.status ?? "Pending"));
     rows1.add(buildTableRow(
-        "Customer Name", bookingOrdersModel.customer?.name ?? "Harsh"));
+        "Customer Name", bookingOrdersModel.customer?.firstName ?? "Harsh"));
     rows1.add(buildTableRow("Phone Number",
         bookingOrdersModel.customer?.phone ?? "+91 9353478558"));
     for (booking.Items item in bookingOrdersModel.items ?? []) {
@@ -160,18 +160,18 @@ class UpcomingDetailsController extends GetxController {
             bookingOrdersModel.transactionId!.isNotEmpty
                 ? bookingOrdersModel.transactionId ?? "Cash"
                 : "Cash"),
-        buildTableRow(
-            "Transaction Type",
-            bookingOrdersModel.transactionId != null
-                ? bookingOrdersModel.transactionId!.isNotEmpty
-                    ? "Online"
-                    : "Offline"
-                : "Offline"),
+        // buildTableRow(
+        //     "Transaction Type",
+        //     bookingOrdersModel.transactionId != null
+        //         ? bookingOrdersModel.transactionId!.isNotEmpty
+        //             ? "Online"
+        //             : "Offline"
+        //         : "Offline"),
+        // if (bookingOrdersModel.total != null)
+        //   buildTableRow("Total Amount", "₹ ${bookingOrdersModel.total ?? 499}"),
         if (bookingOrdersModel.total != null)
-          buildTableRow("Total Amount", "₹ ${bookingOrdersModel.total ?? 499}"),
-        if (bookingOrdersModel.totalDiscountedAmount != null)
           buildTableRow("Bill Amount",
-              "₹ ${bookingOrdersModel.totalDiscountedAmount ?? 499}"),
+              "₹ ${bookingOrdersModel.totalDiscountedAmount != null ? bookingOrdersModel.totalDiscountedAmount : bookingOrdersModel.total}"),
         buildTableRow(
             "Booking Date", bookingOrdersModel.createdDate?.date ?? "No Data"),
         buildTableRow("Academy Name", item.academyName ?? "No Data"),
@@ -184,16 +184,17 @@ class UpcomingDetailsController extends GetxController {
 
   void subscriptionDetails() {
     rows1.add(
-        buildTableRow("Booking ID", subscriptionOrdersModel.id.toString()));
+        buildTableRow("Order ID", subscriptionOrdersModel.id.toString()));
     rows1.add(buildTableRow(
         "Booking Status", subscriptionOrdersModel.status ?? "Pending"));
     rows1.add(buildTableRow("Customer Name",
         subscriptionOrdersModel.items?[0].personName ?? "Harsh"));
-    rows1.add(buildTableRow("Phone Number",
-        subscriptionOrdersModel.customer?.phone ?? "No Data"));
+    rows1.add(buildTableRow(
+        "Phone Number", subscriptionOrdersModel.customer?.phone ?? "No Data"));
 
     for (subscription.Items item in subscriptionOrdersModel.items ?? []) {
       rows2.add([
+        if(subscriptionOrdersModel.transactionId != null && subscriptionOrdersModel.transactionId!.isNotEmpty )
         buildTableRow(
             "Transaction ID",
             subscriptionOrdersModel.transactionId!.isNotEmpty
@@ -207,11 +208,11 @@ class UpcomingDetailsController extends GetxController {
                     : "Offline"
                 : "Offline"),
         if (subscriptionOrdersModel.total != null)
-          buildTableRow(
-              "Total Amount", "₹ ${subscriptionOrdersModel.total ?? 499}"),
-        if (subscriptionOrdersModel.totalDiscountedAmount != null)
           buildTableRow("Bill Amount",
-              "₹ ${subscriptionOrdersModel.totalDiscountedAmount ?? 499}"),
+              "₹ ${subscriptionOrdersModel.totalDiscountedAmount != null ? subscriptionOrdersModel.totalDiscountedAmount : subscriptionOrdersModel.total ?? 499}"),
+        // if (subscriptionOrdersModel.totalDiscountedAmount != null)
+        // buildTableRow("Bill Amount",
+        // "₹ ${subscriptionOrdersModel.totalDiscountedAmount ?? 499}"),
         buildTableRow("Booking Date",
             subscriptionOrdersModel.createdDate?.date ?? "No Data"),
         buildTableRow("Academy Name", item.academyName ?? "No data"),
@@ -220,16 +221,15 @@ class UpcomingDetailsController extends GetxController {
         buildTableRow("Package Amount", "₹ ${item.packageAmount ?? 499}"),
         buildTableRow('Subscription Start Date',
             subscriptionOrdersModel.subscriptions?[0].start ?? "No Data"),
-        buildTableRow(
-            "Next Renewal",
-            subscriptionOrdersModel.subscriptions?[0].nextPayment ??
-                "No Data"),
+        buildTableRow("Next Renewal",
+            subscriptionOrdersModel.subscriptions?[0].nextPayment ?? "No Data"),
       ]);
     }
   }
 
   void venueDetails() {
-    rows1.add(buildTableRow("Booking ID", venueOrdersModel.orderId.toString()));
+    rows1.add(buildTableRow("Order ID", venueOrdersModel.orderId.toString()));
+    rows1.add(buildTableRow("Booking ID", venueOrdersModel.bookingId.toString()));
     rows1.add(
         buildTableRow("Booking Status", venueOrdersModel.status ?? "Pending"));
     rows1.add(buildTableRow(
@@ -252,33 +252,33 @@ class UpcomingDetailsController extends GetxController {
         venueOrdersModel.transactionId != ""
             ? venueOrdersModel.transactionId ?? "No Data"
             : "No Data"));
-    if (venueOrdersModel.bookingAmount != null)
+    // if (venueOrdersModel.bookingAmount != null)
+    //   rows1.add(buildTableRow(
+    //       "Total Amount", "₹ ${venueOrdersModel.bookingAmount.toString()}"));
+    if (venueOrdersModel.orderTotal != null)
       rows1.add(buildTableRow(
-          "Total Amount", "₹ ${venueOrdersModel.bookingAmount.toString()}"));
-    if(venueOrdersModel.orderTotal != null)
-        rows1.add(buildTableRow(
-          "Bill Amount", "₹ ${venueOrdersModel.orderTotal.toString()}"));
-    if(venueOrdersModel.orderTotalDiscountedAmount !=  null)
-      rows1.add(buildTableRow(
-          "Bill Amount", "₹ ${venueOrdersModel.orderTotalDiscountedAmount.toString()}"));
+          "Bill Amount", "₹ ${venueOrdersModel.bookingAmount != null ? venueOrdersModel.bookingAmount : venueOrdersModel.orderTotal.toString()}"));
+    if (venueOrdersModel.orderTotalDiscountedAmount != null)
+      rows1.add(buildTableRow("Bill Amount",
+          "₹ ${venueOrdersModel.orderTotalDiscountedAmount.toString()}"));
     if (venueOrdersModel.orderItems != null)
-      rows1.add(buildTableRow(
-          "No. of Slots in Order", "${venueOrdersModel.orderItems.toString()}"));
+      rows1.add(buildTableRow("No. of Slots in Order",
+          "${venueOrdersModel.orderItems.toString()}"));
     rows1.add(buildTableRow(
-        "Booking Date",DateFormat('yyyy-MMM-dd').format(DateTime.parse(venueOrdersModel.createdDate!.date.toString()))));
+        "Booking Date",
+        DateFormat('yyyy-MMM-dd').format(
+            DateTime.parse(venueOrdersModel.createdDate!.date.toString()))));
     rows1.add(buildTableRow(
         "Venue Name", venueOrdersModel.slot?.item?.name ?? "No data"));
     rows1.add(buildTableRow(
         "Venue Address", venueOrdersModel.slot?.item?.address ?? "No data"));
     rows1.add(buildTableRow(
         "Slot Amount", " ₹ ${venueOrdersModel.slot?.slotAmount ?? 499}"));
-    
 
     rows1.add(buildTableRow("Slot Start Time",
         "${venueOrdersModel.slot!.slotStartDate ?? ""}  ${venueOrdersModel.slot?.slotStartTime ?? "No data"}"));
     rows1.add(buildTableRow("Slot End Time",
         "${venueOrdersModel.slot!.slotEndDate ?? ""}  ${venueOrdersModel.slot?.slotEndTime ?? "No data"}"));
-    
   }
 }
 

@@ -161,9 +161,10 @@ class HomeController extends GetxController {
       setupInteractedMessage()
     ]);
     isLoading = false;
-    totalOrders.value = (int.parse(bookingOrdersModel.totalOrders.toString()) +
-        int.parse(subscriptionOrdersModel.totalOrders.toString()) +
-        int.parse(venueOrdersModel.totalOrders.toString()));
+    totalOrders.value =
+        await (int.parse(bookingOrdersModel.totalOrders.toString()) +
+            int.parse(subscriptionOrdersModel.totalOrders.toString()) +
+            int.parse(venueOrdersModel.totalOrders.toString()));
     displayOrdersSucessfull.value = (bookingOrdersModel.data != null
             ? (bookingOrdersModel.data!.length == 0
                 ? 1 * 70.h
@@ -215,6 +216,8 @@ class HomeController extends GetxController {
     update();
     super.onInit();
   }
+
+  
 
   Future<void> setupInteractedMessage() async {
     try {

@@ -147,9 +147,9 @@ class ApiService extends ApiInterface {
   }
 
   Future<http.Response> updateUserDetails(
-      Map<String, dynamic> data, String userId) async {
-    http.Response res = await putApi(
-      url: ApiInterface.baseUrl + Endpoints.getUserDetails + "/$userId",
+      Map<String, dynamic> data) async {
+    http.Response res = await postApi(
+      url: ApiInterface.baseUrl + Endpoints.updateProfileData,
       data: data,
     );
     return res;

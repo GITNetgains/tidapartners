@@ -15,6 +15,7 @@ import '../../../data/remote/api_service.dart';
 import '../../../data/remote/endpoints.dart';
 import '../models/academy_model.dart';
 import '../models/venue_model.dart';
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileController extends GetxController {
@@ -110,93 +111,142 @@ class ProfileController extends GetxController {
     update();
   }
 
-  Future<void> addPropicApi2() async {
-   Map<String,String> headers = {
-    'Content-Type': 'multipart/form-data;',
-    'authorization': ApiInterface.auth ?? "",
-  };
+  Future<String?> addPropicApi2() async {
+    Map<String, String> headers = {
+      'authorization': ApiInterface.auth.toString(),
+    };
     var request = http.MultipartRequest(
         'POST', Uri.parse(ApiInterface.baseUrl + Endpoints.updateProfileImg));
     request.fields.addAll({
       'user_id': MySharedPref.getUserId().toString(),
     });
     if (croppedFile != null) {
-      request.files.add(
-          await http.MultipartFile.fromPath('async-upload', croppedFile!.path));
+      File imageFile = File(croppedFile!.path);
+      String url = await uploadImageToCloudinary(imageFile.path);
+      print(url);
+      MySharedPref.setAvatar(url);
+      return url;
+      // request.files.add(
+      // await http.MultipartFile.fromPath('async-upload', croppedFile!.path));
+    } else {
+      return MySharedPref.getAvatar();
     }
-    request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    print(response.statusCode);
+    // request.headers.addAll(headers);
+    // http.StreamedResponse response = await request.send();
+    // print(response.statusCode);
 
+    // if (response.statusCode == 200) {
+    //   var res = await response.stream.transform(utf8.decoder).join();
+    //   Map<String, dynamic> data = json.decode(res);
+    //   print(data);
+    //   userImage = data["data"]["profile_url"];
+    //   update();
+    // }
+  }
+
+  Future<String> uploadImageToCloudinary(String imagePath) async {
+    // Read the image file
+    File imageFile = File(imagePath);
+    List<int> imageBytes = await imageFile.readAsBytes();
+
+    // Create the Cloudinary URL
+    var url =
+        Uri.parse('https://api.cloudinary.com/v1_1/dxvobpwzc/image/upload');
+
+    // Prepare the Cloudinary API request
+    var request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'unsigned_preset'
+      // ..fields['public_id'] = "Profile Image"
+      ..fields['api_key'] = '285531831575646'
+      ..fields['timestamp'] = DateTime.now().millisecondsSinceEpoch.toString()
+      // ..fields['signature'] = _generateSignature('ULlUBDwTvHzN9_OnyKgVJmx7REw',
+      // DateTime.now().millisecondsSinceEpoch.toString())
+      ..files.add(http.MultipartFile.fromBytes('file', imageBytes,
+          filename: "imagePath.jpg"));
+
+    // Send the request to Cloudinary
+    var response = await request.send();
+    var responseString = await response.stream.bytesToString();
+    var jsonResponse = jsonDecode(responseString);
+    print(jsonResponse);
+    print("=========================================");
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      var res = await response.stream.transform(utf8.decoder).join();
-      Map<String, dynamic> data = json.decode(res);
-      MySharedPref.setAvatar(data["data"]["profile_url"]);
-      userImage = data["data"]["profile_url"];
-      update();
+      return jsonResponse['secure_url'];
+    } else {
+      throw Exception('Failed to upload image to Cloudinary: $responseString');
     }
   }
+
+  String _generateSignature(String apiSecret, String timestamp) {
+    var bytes = utf8.encode('timestamp=$timestamp$apiSecret');
+    return md5.convert(bytes).toString();
+  }
+
 
   Future<void> editProfileDetails() async {
     try {
       isLoading = true;
       update();
-      if (emailController.text.isEmpty ||
-          phoneController.text.isEmpty ||
-          nameController.text.isEmpty) {
+      if (emailController.text.trim().isEmpty && selectedAvatar == null) {
         isLoading = false;
         update();
-        Get.snackbar("Error", "Kindly Enter Missing details.",
+        Get.snackbar("Error", "Please enter your email address",
             backgroundColor: Colors.red,
             colorText: kWhiteColor,
             snackPosition: SnackPosition.BOTTOM);
         return;
       }
-      if (phoneController.text.length != 10) {
+      if (nameController.text.trim().isEmpty && selectedAvatar == null) {
         isLoading = false;
         update();
-        Get.snackbar("Error", "Kindly Enter Valid Phone Number",
+        Get.snackbar("Error", "Please enter your name",
             backgroundColor: Colors.red,
             colorText: kWhiteColor,
             snackPosition: SnackPosition.BOTTOM);
         return;
       }
-
+      if (phoneController.text.trim().isEmpty && selectedAvatar == null) {
+        isLoading = false;
+        update();
+        Get.snackbar("Error", "Please enter your phone number",
+            backgroundColor: Colors.red,
+            colorText: kWhiteColor,
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+      if (phoneController.text.trim().length != 10) {
+        isLoading = false;
+        update();
+        Get.snackbar("Error", "Please provide a valid phone number",
+            backgroundColor: Colors.red,
+            colorText: kWhiteColor,
+            snackPosition: SnackPosition.BOTTOM);
+        return;
+      }
+      String profileImg = MySharedPref.getAvatar().toString();
+      if (selectedAvatar != null) {
+        profileImg = await addPropicApi2() ?? "";
+      }
       Map<String, dynamic> data = {
-        "email": emailController.text,
-        "first_name": nameController.text,
-        "billing": {
-          "first_name": nameController.text,
-          "email": emailController.text,
-          "phone": phoneController.text,
-        },
-        "shipping": {
-          "first_name": nameController.text,
-          "phone": phoneController.text,
-        }
+        "user_id": MySharedPref.getUserId(),
+        "phone_number": phoneController.text,
+        "name": nameController.text,
+        "signature": "",
+        "image_url": profileImg
       };
       print(data);
       print(MySharedPref.getUserId());
-      dynamic res = await ApiService()
-          .updateUserDetails(data, MySharedPref.getUserId().toString());
+      dynamic res = await ApiService().updateUserDetails(data);
       if (res.statusCode == 200) {
         Map<String, dynamic> updateResponse = jsonDecode(res.body);
         print(updateResponse);
-        CustomerModel customerModel =
-            await CustomerModel.fromJson(updateResponse);
-        if (customerModel.email!.isNotEmpty &&
-            customerModel.firstName!.isNotEmpty &&
-            customerModel.billing!.phone!.isNotEmpty) {
-          print(customerModel);
-          if (selectedAvatar != null) {
-            await addPropicApi2();
-          }
-          MySharedPref.setEmail(customerModel.email.toString());
-          MySharedPref.setName(customerModel.firstName.toString());
-          MySharedPref.setPhone(customerModel.billing!.phone.toString());
+        if (updateResponse["status"] == true) {
+          MySharedPref.setName(updateResponse["name"]);
+          MySharedPref.setPhone(updateResponse["phone_number"]);
+          MySharedPref.setAvatar(updateResponse["image_url"]);
           isLoading = false;
           update();
-          Get.offNamed(AppPages.HOME);
           Get.snackbar("Successfull", "Profile updated successfully",
               backgroundColor: kSuccessColor,
               colorText: kWhiteColor,
@@ -204,23 +254,32 @@ class ProfileController extends GetxController {
         } else {
           isLoading = false;
           update();
-          Get.snackbar("Error", "Kindly Enter Missing details.",
-              backgroundColor: Colors.red,
-              colorText: kWhiteColor,
-              snackPosition: SnackPosition.BOTTOM);
+          if (updateResponse["status"] == false &&
+              updateResponse["message"] != null) {
+            Get.snackbar("Error", updateResponse["message"],
+                backgroundColor: Colors.red,
+                colorText: kWhiteColor,
+                snackPosition: SnackPosition.BOTTOM);
+          }
+          else{
+            Get.snackbar("Error", "Server Time Out",
+                backgroundColor: Colors.red,
+                colorText: kWhiteColor,
+                snackPosition: SnackPosition.BOTTOM);
+          }
         }
       } else {
         isLoading = false;
         update();
-        Get.snackbar("Error", "Kindly Enter Missing details.",
-            backgroundColor: Colors.red,
-            colorText: kWhiteColor,
-            snackPosition: SnackPosition.BOTTOM);
+        // Get.snackbar("Error", "Couldn't Update your Profile Details",
+        //     backgroundColor: Colors.red,
+        //     colorText: kWhiteColor,
+        //     snackPosition: SnackPosition.BOTTOM) ;
       }
     } catch (e) {
       isLoading = false;
       update();
-      Get.snackbar("Error", "Couldnt Update your Profile Details",
+      Get.snackbar("Error", "Couldn't Update your Profile Details",
           backgroundColor: Colors.red,
           colorText: kWhiteColor,
           snackPosition: SnackPosition.BOTTOM);

@@ -26,8 +26,8 @@ class ChangePasswordController extends GetxController {
 
   void onButtonPressed() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () async{
-      await changepass();
+    _debounce = Timer(const Duration(milliseconds: 1000), () async {
+      changepass();
     });
   }
 
@@ -88,9 +88,16 @@ class ChangePasswordController extends GetxController {
               .changePassword(newpassword.text.trim(), userid);
           print((res.body).toString());
           if (res.statusCode == 200) {
-            showSuccessfulSnackbar(jsonDecode(res.body));
+            if (jsonDecode(res.body)["status"] == "success") {
+              showSuccessfulSnackbar(jsonDecode(res.body)["message"]);
+            } else {
+              Get.snackbar("Error", jsonDecode(res.body)["message"],
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM);
+            }
           } else {
-            Get.snackbar("Error", jsonDecode(res.body),
+            Get.snackbar("Error", jsonDecode(res.body)["message"],
                 backgroundColor: Colors.red,
                 colorText: Colors.white,
                 snackPosition: SnackPosition.BOTTOM);

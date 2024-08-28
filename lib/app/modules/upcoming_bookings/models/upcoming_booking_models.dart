@@ -38,6 +38,7 @@ class UpcomingBookingsModel {
 
 class Data {
   int? orderId;
+  int? bookingId;
   String? status;
   String? currency;
   CreatedDate? createdDate;
@@ -52,6 +53,7 @@ class Data {
 
   Data(
       {this.orderId,
+      this.bookingId,
       this.status,
       this.currency,
       this.createdDate,
@@ -67,6 +69,9 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     if (json["order_id"] is int) {
       orderId = json["order_id"];
+    }
+    if (json["booking_id"] is int) {
+      bookingId = json["booking_id"];
     }
     if (json["status"] is String) {
       status = json["status"];
@@ -109,6 +114,7 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["order_id"] = orderId;
+    _data["booking_id"] = bookingId;
     _data["status"] = status;
     _data["currency"] = currency;
     if (createdDate != null) {

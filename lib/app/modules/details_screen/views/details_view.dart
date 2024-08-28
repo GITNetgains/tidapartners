@@ -122,7 +122,7 @@ class DetailsView extends StatelessWidget {
                                         "" ||
                                     controller.venueOrdersModel.status == "")
                             ? SizedBox.shrink()
-                            : Row(
+                            : controller.isAcceptReject.value ?  Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
@@ -175,7 +175,7 @@ class DetailsView extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              ),
+                              ) : SizedBox.shrink(),
                                (controller.bookingOrdersModel.transactionType == "online" ||
                                     controller.subscriptionOrdersModel
                                             .transactionType ==

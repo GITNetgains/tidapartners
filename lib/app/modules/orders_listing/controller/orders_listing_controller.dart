@@ -21,6 +21,7 @@ class OrdersListingController extends GetxController {
   BookingOrdersModel bookingOrdersModel = BookingOrdersModel();
   TextEditingController searchController = TextEditingController();
   RxBool isLoading = false.obs;
+  RxBool searchText = false.obs;
   int pageingnumb = 1;
   int maxpage = 0;
   String status = "";
@@ -39,6 +40,9 @@ class OrdersListingController extends GetxController {
   Future<void> fetchOrders(int pageingnumb) async {
     isLoading(true);
     update();
+    if (searchController.text.isNotEmpty && searchText == false) {
+      pageingnumb = 1;
+    }
     if (ordertype == "Bookings") {
       await getAcademyOrders();
     } else if (ordertype == "Subscriptions") {
@@ -49,18 +53,18 @@ class OrdersListingController extends GetxController {
     isLoading(false);
     update();
   }
-  
 
   Future<void> getAcademyOrders() async {
     try {
       ordersList.clear();
+
       Map<String, dynamic> data = {
         "search_term": searchController.text,
         "user": MySharedPref.getUserId(),
         "start_date": startdate,
         "end_date": enddate,
         "page": pageingnumb,
-        "status":status
+        "status": status
       };
       dynamic res = await ApiService().getAcademyBookings(data);
       res = jsonDecode(res.body);
@@ -86,7 +90,9 @@ class OrdersListingController extends GetxController {
                 noOfBookings: element.items?.length ?? 1,
                 customerName: element.items != null
                     ? element.items!.isNotEmpty
-                        ? element.items![0].personName ?? "N/A"
+                        ? element.items![0].personName ??
+                            element.customer?.name ??
+                            "N/A"
                         : "N/A"
                     : "N/A"));
           });
@@ -107,7 +113,7 @@ class OrdersListingController extends GetxController {
         "start_date": startdate,
         "end_date": enddate,
         "page": pageingnumb,
-        "status":status
+        "status": status
       };
       dynamic res = await ApiService().getVenueBookings(data);
       res = jsonDecode(res.body);
@@ -124,7 +130,11 @@ class OrdersListingController extends GetxController {
                 name: element.items?.a?.name ?? "N/A",
                 location: element.items?.a?.address ?? "N/A",
                 noOfBookings: element.items?.slots?.length ?? 1,
-                customerName: element.items?.a?.personName ?? "N/A"));
+                customerName: element.items?.a?.personName != null
+                    ? element.items?.a?.personName ??
+                        element.customer?.name ??
+                        "N/A"
+                    : element.customer?.name ?? "N/A"));
           });
         }
       }
@@ -143,7 +153,7 @@ class OrdersListingController extends GetxController {
         "start_date": startdate,
         "end_date": enddate,
         "page": pageingnumb,
-        "status":status,
+        "status": status,
       };
       dynamic res = await ApiService().getSubscriptionBookings(data);
       res = jsonDecode(res.body);
@@ -160,7 +170,11 @@ class OrdersListingController extends GetxController {
                 name: element.items?[0].academyName ?? "N/A",
                 location: element.items?[0].academyAddress ?? "N/A",
                 noOfBookings: element.items?.length ?? 1,
-                customerName: element.items?[0].personName ?? "N/A"));
+                customerName: element.items?[0].personName != null
+                    ? element.items![0].personName ??
+                        element.customer?.name ??
+                        "N/A"
+                    : element.customer?.name ?? "N/A"));
           });
         }
       }
@@ -169,5 +183,4 @@ class OrdersListingController extends GetxController {
       return;
     }
   }
-
 }

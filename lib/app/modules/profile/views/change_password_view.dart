@@ -53,7 +53,7 @@ class ChangePasswordView extends StatelessWidget {
                       hintText: "**********",
                       suffixIcon: IconButton(
                           onPressed: () {
-                            c.onButtonPressed();
+                            c.changepasswordview();
                           },
                           icon: Icon(c.isPasswordView.value
                               ? Icons.remove_red_eye

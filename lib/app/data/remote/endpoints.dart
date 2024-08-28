@@ -24,4 +24,5 @@ class Endpoints {
   static const upcomingBookings = "/tida/v1/get_upcoming_ordersbypartner";
   static const upcomingSubscriptions = "/tida/v1/get_upcoming_subscriptionsbypartner";
   static const updateOrderPayment = "/update_order_payment";
+  static const updateProfileData= "/tida/v1/update_profile_data";
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:tidapartners/app/components/show_loader.dart';
 import 'package:tidapartners/app/modules/profile/controllers/profile_controller.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../utils/colors.dart';
@@ -38,7 +39,7 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: SingleChildScrollView(
+            body: controller.isLoading ? ShowLoader() : SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(16.0.dg),
                 child: Column(

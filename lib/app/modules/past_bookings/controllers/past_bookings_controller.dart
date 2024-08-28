@@ -87,7 +87,7 @@ class PastBookingsController extends GetxController {
                   imagePath: element.slot!.item!.image.toString(),
                   name: element.slot!.item!.name.toString(),
                   location: element.slot!.item!.address.toString(),
-                  customerName: element.customer!.name.toString(),
+                  customerName: element.customer!.firstName.toString(),
                   slotdate: element.slot!.slotStartDate.toString() +
                       " " +
                       element.slot!.slotStartTime.toString()));
@@ -126,7 +126,7 @@ class PastBookingsController extends GetxController {
                   imagePath: element.items![0].image.toString(),
                   name: element.items![0].academyName!.toString(),
                   location: element.items![0].academyAddress!.toString(),
-                  customerName: element.customer!.name.toString(),
+                  customerName: element.customer!.firstName.toString(),
                   slotdate: element.subscriptions != null
                       ? element.subscriptions![0].nextPayment.toString()
                       : ""));

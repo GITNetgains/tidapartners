@@ -24,6 +24,7 @@ class DetailsController extends GetxController {
   String orderid = "";
   RxBool isLoading = false.obs;
   String CustomerpartnerId = "";
+  RxBool isAcceptReject = false.obs;
 
   @override
   void onInit() async {
@@ -48,6 +49,12 @@ class DetailsController extends GetxController {
       CustomerpartnerId = subscriptionOrdersModel.customer!.id.toString();
       update();
     }
+    isAcceptReject.value = (bookingOrdersModel.transactionType == "offline" ||
+            subscriptionOrdersModel.transactionType == "offline" ||
+            venueOrdersModel.transactionType == "offline") &&
+        (bookingOrdersModel.status == "on-hold" ||
+            subscriptionOrdersModel.status == "on-hold");
+    update();
     super.onInit();
   }
 
@@ -139,9 +146,7 @@ class DetailsController extends GetxController {
       // await resonseapi(orderid, venueOrdersModel.customer!.id.toString());
       update();
     }
-    Get.back();
-    Get.offAllNamed(AppPages.HOME);
-    isLoading(false);
+    // Get.back();
     Get.snackbar(
       'Success',
       'Order Updated Sucessfully',
@@ -154,6 +159,8 @@ class DetailsController extends GetxController {
       duration: const Duration(seconds: 3),
     );
     update();
+    Get.toNamed(AppPages.HOME);
+    isLoading(false);
   }
 
   void bookingDetails() {
@@ -161,9 +168,13 @@ class DetailsController extends GetxController {
     rows1.add(buildTableRow(
         "Booking Status", bookingOrdersModel.status ?? "Pending"));
     rows1.add(buildTableRow(
-        "Customer Name", bookingOrdersModel.customer?.name ?? "Harsh"));
+        "Customer Name",
+        bookingOrdersModel.items != null
+            ? bookingOrdersModel.items![0].personName ?? ""
+            : bookingOrdersModel.customer?.name ?? "Harsh"));
     rows1.add(buildTableRow("Phone Number",
         bookingOrdersModel.customer?.phone ?? "+91 9353478558"));
+        print(bookingOrdersModel.transactionType);
     for (booking.Items item in bookingOrdersModel.items ?? []) {
       rows2.add([
         if (bookingOrdersModel.transactionId!.isNotEmpty)
@@ -199,8 +210,13 @@ class DetailsController extends GetxController {
         buildTableRow("Booking ID", subscriptionOrdersModel.id.toString()));
     rows1.add(buildTableRow(
         "Booking Status", subscriptionOrdersModel.status ?? "Pending"));
-    rows1.add(buildTableRow("Customer Name",
-        subscriptionOrdersModel.items?[0].personName ?? "Harsh"));
+    rows1.add(buildTableRow(
+        "Customer Name",
+        subscriptionOrdersModel.items != null
+            ? subscriptionOrdersModel.items![0].personName ??
+                subscriptionOrdersModel.customer?.name ??
+                "N/A"
+            : subscriptionOrdersModel.customer?.name ?? "Harsh"));
     rows1.add(buildTableRow("Phone Number",
         subscriptionOrdersModel.customer?.phone ?? "+91 9353478338"));
 
@@ -247,8 +263,10 @@ class DetailsController extends GetxController {
         buildTableRow("Booking Status", venueOrdersModel.status ?? "Pending"));
     rows1.add(buildTableRow(
         "Customer Name",
-        venueOrdersModel.items?.a?.personName != "No Data"
-            ? venueOrdersModel.items?.a?.personName ?? "No Data"
+        venueOrdersModel.items?.a?.personName != ""
+            ? venueOrdersModel.items?.a?.personName ??
+                venueOrdersModel.customer!.name ??
+                "No Data"
             : venueOrdersModel.customer?.name ?? "No Data"));
     rows1.add(buildTableRow(
         "Phone Number", venueOrdersModel.customer?.phone ?? "No Data"));
@@ -329,7 +347,6 @@ class DetailsController extends GetxController {
   Future resonseapi(String orderId, String customerId) async {
     try {
       await ApiService.sendBookingNotification(customerId, orderid);
-      
     } catch (e) {
       print(e);
     }

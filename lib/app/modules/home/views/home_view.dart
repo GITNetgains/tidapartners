@@ -344,6 +344,7 @@ class _HomeViewState extends State<HomeView>
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 10.dg),
                                     child: TabBarView(
+                                        physics: NeverScrollableScrollPhysics(),
                                         controller: _tabController,
                                         children: [
                                           OrdersListProtoType(controller),
@@ -486,7 +487,7 @@ class _HomeViewState extends State<HomeView>
               "order_type": "Bookings",
               "start_date": controller.startdate,
               "end_date": controller.enddate,
-               "status": "pending"
+              "status": "pending"
             });
           },
           view: controller.bookingsDetailsListPending.isEmpty ? false : true,
