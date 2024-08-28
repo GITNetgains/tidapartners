@@ -159,7 +159,7 @@ class DetailsController extends GetxController {
       duration: const Duration(seconds: 3),
     );
     update();
-    Get.toNamed(AppPages.HOME);
+    Get.offNamed(AppPages.HOME);
     isLoading(false);
   }
 
