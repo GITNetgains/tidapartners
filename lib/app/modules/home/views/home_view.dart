@@ -387,7 +387,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "booking",
                         "data": controller.bookingOrdersModel.data?[index]
                       });
@@ -424,7 +424,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "subscription",
                         "data": controller.subscriptionOrdersModel.data?[index],
                       });
@@ -461,7 +461,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "slots",
                         "data": controller.venueOrdersModel.data?[index]
                       });
@@ -503,7 +503,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "booking",
                         "data":
                             controller.bookingOrdersModelPending.data?[index]
@@ -542,7 +542,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "subscription",
                         "data": controller
                             .subscriptionOrdersModelPending.data?[index],
@@ -580,7 +580,7 @@ class _HomeViewState extends State<HomeView>
                 itemBuilder: ((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppPages.DETAILS_SCREEN, arguments: {
+                      Get.offNamed(AppPages.DETAILS_SCREEN, arguments: {
                         "detailname": "slots",
                         "data": controller.venueOrdersModelPending.data?[index]
                       });
